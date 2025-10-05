@@ -122,3 +122,24 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Hardhat/Blockchain files
+contracts/artifacts/
+contracts/cache/
+contracts/node_modules/
+contracts/package-lock.json
+
+# Environment files
+.env.local
+
+# System files
+public/.DS_Store
+Thumbs.db
+
+# Cache files
+node_modules/.cache/
+.cache/
+contracts/node_modules/
+contracts/artifacts/
+contracts/cache/
+contracts/package-lock.json

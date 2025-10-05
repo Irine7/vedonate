@@ -1,14 +1,19 @@
 {
-	"name": "next-template",
-	"version": "0.1.0",
+	"name": "vedonate",
+	"version": "1.0.0",
 	"private": true,
+	"description": "VeDonate - Decentralized blood donation platform on VeChain",
 	"scripts": {
 		"build": "next build",
 		"clean": "rm -rf .next dist .turbo",
 		"dev": "next dev --turbopack",
 		"install:clean": "pnpm install --frozen-lockfile",
 		"lint": "next lint",
-		"type-check": "tsc --noEmit"
+		"type-check": "tsc --noEmit",
+		"contracts:compile": "cd contracts && npm run compile",
+		"contracts:deploy:testnet": "cd contracts && npm run deploy:testnet",
+		"contracts:deploy:mainnet": "cd contracts && npm run deploy:mainnet",
+		"setup:contracts": "cd contracts && npm install"
 	},
 	"packageManager": "pnpm@8.15.0",
 	"dependencies": {
@@ -39,5 +44,14 @@
 		"eslint-config-next": "14.1.4",
 		"typescript": "5.3.3"
 	},
-	"homepage": "https://vechain.github.io/next-template"
+	"homepage": "https://vedonate.vechain.org",
+	"keywords": [
+		"vechain",
+		"blockchain",
+		"donation",
+		"blood",
+		"nft",
+		"defi",
+		"vedonate"
+	]
 }

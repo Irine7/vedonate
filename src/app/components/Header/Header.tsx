@@ -23,6 +23,7 @@ import {
 	VStack,
 	Divider,
 	Text,
+	Image,
 } from '@chakra-ui/react';
 // Custom icons as simple text/symbols
 import { useWallet, WalletButton } from '@vechain/vechain-kit';
@@ -103,16 +104,27 @@ export function Header(): ReactElement {
 					<Flex h={16} alignItems="center" justifyContent="space-between">
 						{/* Logo */}
 						<Link href="/">
-							<Heading
-								size="md"
-								bgGradient="linear(to-r, blue.400, purple.400)"
-								bgClip="text"
+							<HStack
+								spacing={2}
 								cursor="pointer"
 								_hover={{ transform: 'scale(1.05)' }}
 								transition="transform 0.2s"
 							>
-								VeDonate
-							</Heading>
+								<Image
+									src="/logo.png"
+									alt="VeDonate Logo"
+									height="32px"
+									width="32px"
+									objectFit="contain"
+								/>
+								<Heading
+									size="md"
+									bgGradient="linear(to-r, orange.400, red.400)"
+									bgClip="text"
+								>
+									VeDonate
+								</Heading>
+							</HStack>
 						</Link>
 
 						{/* Desktop Navigation */}
@@ -135,11 +147,11 @@ export function Header(): ReactElement {
 
 						{/* Right side controls */}
 						<HStack spacing={4}>
-							{/* Theme toggle */}
-							<ThemeToggle />
-
 							{/* Language selector */}
 							<LanguageSelector />
+
+							{/* Theme toggle */}
+							<ThemeToggle />
 
 							{/* Wallet Button */}
 							<WalletSection />
@@ -166,13 +178,22 @@ export function Header(): ReactElement {
 				<DrawerContent>
 					<DrawerCloseButton />
 					<DrawerHeader>
-						<Heading
-							size="md"
-							bgGradient="linear(to-r, blue.400, purple.400)"
-							bgClip="text"
-						>
-							VeDonate
-						</Heading>
+						<HStack spacing={2}>
+							<Image
+								src="/logo.png"
+								alt="VeDonate Logo"
+								height="30px"
+								width="30px"
+								objectFit="contain"
+							/>
+							<Heading
+								size="md"
+								bgGradient="linear(to-r, orange.400, red.400)"
+								bgClip="text"
+							>
+								VeDonate
+							</Heading>
+						</HStack>
 					</DrawerHeader>
 
 					<DrawerBody>

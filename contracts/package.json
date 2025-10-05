@@ -1,0 +1,29 @@
+{
+	"name": "vedonate-contracts",
+	"version": "1.0.0",
+	"description": "Smart contracts for VeDonate - decentralized blood donation platform",
+	"main": "index.js",
+	"scripts": {
+		"compile": "hardhat compile",
+		"deploy": "hardhat run deploy.js --network vechain_testnet",
+		"test": "hardhat test",
+		"verify": "hardhat verify --network vechain_testnet",
+		"clean": "hardhat clean",
+		"address": "hardhat run get-deployer-address.js --network vechain_testnet",
+		"check": "hardhat run test-scripts/check-contracts.js --network vechain_testnet",
+		"test:quick": "hardhat run test-scripts/quick-test.js --network vechain_testnet",
+		"test:basic": "hardhat run test-scripts/test-basic.js --network vechain_testnet",
+		"test:edge": "hardhat run test-scripts/test-edge-cases.js --network vechain_testnet",
+		"test:badges": "hardhat run test-scripts/test-badges.js --network vechain_testnet",
+		"test:all": "npm run check && npm run test:quick && npm run test:basic && npm run test:edge && npm run test:badges"
+	},
+	"devDependencies": {
+		"@nomicfoundation/hardhat-toolbox": "^4.0.0",
+		"@vechain/sdk-core": "^2.0.5",
+		"@vechain/sdk-hardhat-plugin": "^2.0.5",
+		"hardhat": "^2.19.0"
+	},
+	"dependencies": {
+		"@openzeppelin/contracts": "^5.4.0"
+	}
+}
