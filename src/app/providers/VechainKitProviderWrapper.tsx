@@ -44,7 +44,7 @@ export function VechainKitProviderWrapper({ children }: Props) {
 					delegatorUrl:
 						process.env.NEXT_PUBLIC_DELEGATOR_URL ||
 						'https://sponsor-testnet.vechain.energy/by/90',
-					delegateAllTransactions: false,
+					delegateAllTransactions: true, // Включаем fee delegation для всех транзакций
 					b3trTransfers: {
 						minAmountInEther: 1,
 					},
