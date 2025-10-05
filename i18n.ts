@@ -14,63 +14,70 @@ import ja from './src/app/languages/ja.json';
 export const supportedLanguages = ['en', 'de', 'it', 'fr', 'es', 'zh', 'ja'];
 
 export const resources = {
-    en: { translation: en },
-    de: { translation: de },
-    it: { translation: it },
-    fr: { translation: fr },
-    es: { translation: es },
-    zh: { translation: zh },
-    ja: { translation: ja },
+	en: { translation: en },
+	de: { translation: de },
+	it: { translation: it },
+	fr: { translation: fr },
+	es: { translation: es },
+	zh: { translation: zh },
+	ja: { translation: ja },
 };
 
 // Language names mapping
 export const languageNames = {
-    en: 'English',
-    de: 'Deutsch',
-    it: 'Italiano',
-    fr: 'Français',
-    es: 'Español',
-    zh: '中文',
-    ja: '日本語',
+	en: 'English',
+	de: 'Deutsch',
+	it: 'Italiano',
+	fr: 'Français',
+	es: 'Español',
+	zh: '中文',
+	ja: '日本語',
 };
 
 // Custom language detector that checks prop first, then browser
 const customLanguageDetector = {
-    name: 'customDetector',
-    lookup: (options?: { languages?: string[] } | undefined) => {
-        const propLanguage = options?.languages?.[0];
+	name: 'customDetector',
+	lookup: (options?: { languages?: string[] } | undefined) => {
+		const propLanguage = options?.languages?.[0];
 
-        if (propLanguage && supportedLanguages.includes(propLanguage)) {
-            return propLanguage;
-        }
+		if (propLanguage && supportedLanguages.includes(propLanguage)) {
+			return propLanguage;
+		}
 
-        // Get browser language
-        const browserLang = navigator.language.split('-')[0];
-        if (browserLang && supportedLanguages.includes(browserLang)) {
-            return browserLang;
-        }
+		// Check if we're in browser environment
+		if (typeof window !== 'undefined' && navigator) {
+			// Get browser language
+			const browserLang = navigator.language.split('-')[0];
+			if (browserLang && supportedLanguages.includes(browserLang)) {
+				return browserLang;
+			}
+		}
 
-        return 'en'; // fallback
-    },
-    cacheUserLanguage: (lng: string) => {
-        localStorage.setItem('i18nextLng', lng);
-    },
+		return 'en'; // fallback
+	},
+	cacheUserLanguage: (lng: string) => {
+		// Check if localStorage is available (browser environment)
+		if (typeof window !== 'undefined' && localStorage) {
+			localStorage.setItem('i18nextLng', lng);
+		}
+	},
 };
 
-i18n.use({
-    type: 'languageDetector',
-    async: false,
-    init: () => {},
-    detect: customLanguageDetector.lookup,
-    cacheUserLanguage: customLanguageDetector.cacheUserLanguage,
-})
-    .use(initReactI18next)
-    .init({
-        resources,
-        fallbackLng: 'en',
-        interpolation: {
-            escapeValue: false,
-        },
-    });
+i18n
+	.use({
+		type: 'languageDetector',
+		async: false,
+		init: () => {},
+		detect: customLanguageDetector.lookup,
+		cacheUserLanguage: customLanguageDetector.cacheUserLanguage,
+	})
+	.use(initReactI18next)
+	.init({
+		resources,
+		fallbackLng: 'en',
+		interpolation: {
+			escapeValue: false,
+		},
+	});
 
 export default i18n;

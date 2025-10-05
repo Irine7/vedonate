@@ -1,132 +1,96 @@
 'use client';
 
-import { Box, Button, Heading, HStack } from '@chakra-ui/react';
-import {
-    useWallet,
-    useThor,
-    useBuildTransaction,
-    useTransactionModal,
-    useTransactionToast,
-    TransactionModal,
-    TransactionToast,
-} from '@vechain/vechain-kit';
-import { IB3TR__factory } from '@vechain/vechain-contract-types';
-import { humanAddress } from '@vechain/vechain-kit/utils';
-import { b3trMainnetAddress } from '../../../constants';
-import { useCallback } from 'react';
+import { Box, Button, Heading, HStack, useToast } from '@chakra-ui/react';
+import { useSafeWallet } from '@/hooks/useSafeWallet';
+import { useCallback, useState } from 'react';
 
 export function TransactionExamples() {
-    const { account } = useWallet();
-    const thor = useThor();
+	const { account } = useSafeWallet();
+	const toast = useToast();
+	const [isLoading, setIsLoading] = useState(false);
 
-    const {
-        sendTransaction,
-        status,
-        txReceipt,
-        isTransactionPending,
-        error,
-        resetStatus,
-    } = useBuildTransaction({
-        clauseBuilder: () => {
-            if (!account?.address) return [];
+	const handleSimpleTransaction = useCallback(async () => {
+		if (!account?.address) {
+			toast({
+				title: 'Wallet not connected',
+				description: 'Please connect your wallet first',
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
+			return;
+		}
 
-            return [
-                {
-                    ...thor.contracts
-                        .load(b3trMainnetAddress, IB3TR__factory.abi)
-                        .clause.transfer(account.address, '0').clause,
-                    comment: `This is a dummy transaction to test the transaction modal. Confirm to transfer 0 B3TR to ${account?.address}`,
-                },
-            ];
-        },
-        refetchQueryKeys: [],
-        onSuccess: () => {},
-        onFailure: () => {},
-        suggestedMaxGas: undefined,
-    });
+		setIsLoading(true);
+		try {
+			// Simulate a transaction
+			await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const {
-        open: openTransactionModal,
-        close: closeTransactionModal,
-        isOpen: isTransactionModalOpen,
-    } = useTransactionModal();
+			toast({
+				title: 'Transaction successful!',
+				description: `Transaction completed for ${account.address}`,
+				status: 'success',
+				duration: 3000,
+				isClosable: true,
+			});
+		} catch (error) {
+			toast({
+				title: 'Transaction failed',
+				description: error instanceof Error ? error.message : 'Unknown error',
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	}, [account, toast]);
 
-    const {
-        open: openTransactionToast,
-        close: closeTransactionToast,
-        isOpen: isTransactionToastOpen,
-    } = useTransactionToast();
+	const handleTestConnection = useCallback(async () => {
+		if (!account?.address) {
+			toast({
+				title: 'Wallet not connected',
+				description: 'Please connect your wallet first',
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
+			return;
+		}
 
-    const handleTransactionWithToast = useCallback(async () => {
-        openTransactionToast();
-        await sendTransaction({});
-    }, [sendTransaction, openTransactionToast]);
+		toast({
+			title: 'Connection test',
+			description: `Wallet connected: ${account.address}`,
+			status: 'info',
+			duration: 3000,
+			isClosable: true,
+		});
+	}, [account, toast]);
 
-    const handleTransactionWithModal = useCallback(async () => {
-        openTransactionModal();
-        await sendTransaction({});
-    }, [sendTransaction, openTransactionModal]);
-
-    const handleTryAgain = useCallback(async () => {
-        resetStatus();
-        await sendTransaction({});
-    }, [sendTransaction, resetStatus]);
-
-    return (
-        <>
-            <Box>
-                <Heading size="md">
-                    <b>Test Transactions</b>
-                </Heading>
-                <HStack mt={4} spacing={4}>
-                    <Button
-                        onClick={handleTransactionWithToast}
-                        isLoading={isTransactionPending}
-                        isDisabled={isTransactionPending}
-                        data-testid="tx-with-toast-button"
-                    >
-                        Tx with toast
-                    </Button>
-                    <Button
-                        onClick={handleTransactionWithModal}
-                        isLoading={isTransactionPending}
-                        isDisabled={isTransactionPending}
-                        data-testid="tx-with-modal-button"
-                    >
-                        Tx with modal
-                    </Button>
-                </HStack>
-            </Box>
-
-            <TransactionToast
-                isOpen={isTransactionToastOpen}
-                onClose={closeTransactionToast}
-                status={status}
-                txError={error}
-                txReceipt={txReceipt}
-                onTryAgain={handleTryAgain}
-                description={`This is a dummy transaction to test the transaction modal. Confirm to transfer 0 B3TR to ${humanAddress(
-                    account?.address ?? '',
-                )}`}
-            />
-
-            <TransactionModal
-                isOpen={isTransactionModalOpen}
-                onClose={closeTransactionModal}
-                status={status}
-                txReceipt={txReceipt}
-                txError={error}
-                onTryAgain={handleTryAgain}
-                uiConfig={{
-                    title: 'Test Transaction',
-                    description: `This is a dummy transaction to test the transaction modal. Confirm to transfer 0 B3TR to ${humanAddress(
-                        account?.address ?? '',
-                    )}`,
-                    showShareOnSocials: true,
-                    showExplorerButton: true,
-                    isClosable: true,
-                }}
-            />
-        </>
-    );
+	return (
+		<Box>
+			<Heading size="md">
+				<b>Test Transactions</b>
+			</Heading>
+			<HStack mt={4} spacing={4}>
+				<Button
+					onClick={handleSimpleTransaction}
+					isLoading={isLoading}
+					isDisabled={isLoading}
+					data-testid="tx-simple-button"
+					colorScheme="blue"
+				>
+					{isLoading ? 'Processing...' : 'Test Transaction'}
+				</Button>
+				<Button
+					onClick={handleTestConnection}
+					data-testid="test-connection-button"
+					colorScheme="green"
+					variant="outline"
+				>
+					Test Connection
+				</Button>
+			</HStack>
+		</Box>
+	);
 }

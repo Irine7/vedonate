@@ -9,14 +9,13 @@ export function LanguageSelector() {
 
     return (
         <Box>
-            <Heading size={'md'}>
+            {/* <Heading size={'md'}>
                 <b>Multilanguage</b> (currently disabled)
-            </Heading>
-            <VStack mt={4} spacing={4} alignItems="flex-start">
-                <Text>
-                    {t('Demo text to be translated')} - (language should change
-                    also in modal and toast)
-                </Text>
+            </Heading> */}
+            <VStack spacing={4} alignItems="flex-start">
+                {/* <Text>
+                    {t('Demo text to be translated')}
+                </Text> */}
                 <Select
                     borderRadius={'md'}
                     size="sm"

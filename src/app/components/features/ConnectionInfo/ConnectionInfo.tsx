@@ -1,18 +1,18 @@
 'use client';
 
 import { Box, Heading, Text } from '@chakra-ui/react';
-import { useWallet } from '@vechain/vechain-kit';
+import { useSafeWallet } from '@/hooks/useSafeWallet';
 
 export function ConnectionInfo() {
-    const { connection } = useWallet();
+	const { connection } = useSafeWallet();
 
-    return (
-        <Box>
-            <Heading size={'md'}>
-                <b>Connection</b>
-            </Heading>
-            <Text data-testid="connection-type">Type: {connection.source.type}</Text>
-            <Text data-testid="network">Network: {connection.network}</Text>
-        </Box>
-    );
+	return (
+		<Box>
+			<Heading size={'md'}>
+				<b>Connection</b>
+			</Heading>
+			<Text data-testid="connection-type">Type: {connection.source.type}</Text>
+			<Text data-testid="network">Network: {connection.network}</Text>
+		</Box>
+	);
 }
