@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useVeDonate } from '@/hooks/useVeDonate';
 import { useWallet } from '@vechain/vechain-kit';
 import { BadgeType } from '@/lib/contracts';
+import { ClientOnly } from '@/components/ClientOnly';
 
 interface TestDonationForm {
 	donor: string;
@@ -12,8 +13,12 @@ interface TestDonationForm {
 	centerId: string;
 }
 
-export default function TestInterface() {
+function TestInterfaceContent() {
 	const { account, connection } = useWallet();
+
+	// Проверяем, что connection и thor инициализированы
+	const isConnectionReady = connection && connection.thor;
+
 	const {
 		donorInfo,
 		donorDonations,
@@ -53,7 +58,11 @@ export default function TestInterface() {
 			await registerDonor();
 			addTestResult('✅ Донор успешно зарегистрирован!');
 		} catch (err) {
-			addTestResult(`❌ Ошибка регистрации: ${err}`);
+			addTestResult(
+				`❌ Ошибка регистрации: ${
+					err instanceof Error ? err.message : String(err)
+				}`
+			);
 		}
 	};
 
@@ -68,7 +77,11 @@ export default function TestInterface() {
 			);
 			addTestResult('✅ Донация успешно добавлена!');
 		} catch (err) {
-			addTestResult(`❌ Ошибка добавления донации: ${err}`);
+			addTestResult(
+				`❌ Ошибка добавления донации: ${
+					err instanceof Error ? err.message : String(err)
+				}`
+			);
 		}
 	};
 
@@ -78,7 +91,11 @@ export default function TestInterface() {
 			await refreshData();
 			addTestResult('✅ Данные обновлены!');
 		} catch (err) {
-			addTestResult(`❌ Ошибка обновления: ${err}`);
+			addTestResult(
+				`❌ Ошибка обновления: ${
+					err instanceof Error ? err.message : String(err)
+				}`
+			);
 		}
 	};
 
@@ -105,12 +122,10 @@ export default function TestInterface() {
 					<div className="flex items-center space-x-3">
 						<div
 							className={`w-3 h-3 rounded-full ${
-								connection.isConnected ? 'bg-green-500' : 'bg-red-500'
+								isConnectionReady ? 'bg-green-500' : 'bg-red-500'
 							}`}
 						></div>
-						<span>
-							VeChain подключен: {connection.isConnected ? '✅' : '❌'}
-						</span>
+						<span>VeChain подключен: {isConnectionReady ? '✅' : '❌'}</span>
 					</div>
 					<div className="flex items-center space-x-3">
 						<div
@@ -123,7 +138,11 @@ export default function TestInterface() {
 				</div>
 				{account && (
 					<div className="mt-3 p-3 bg-gray-100 dark:bg-gray-700 rounded">
-						<p className="text-sm font-mono break-all">{account}</p>
+						<p className="text-sm font-mono break-all">
+							{typeof account === 'string'
+								? account
+								: account?.address || JSON.stringify(account)}
+						</p>
 						{isDeployer && (
 							<span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
 								🔑 Деплойер
@@ -305,9 +324,7 @@ export default function TestInterface() {
 							<button
 								onClick={handleRegisterDonor}
 								disabled={
-									isLoading ||
-									!connection.isConnected ||
-									donorInfo?.isRegistered
+									isLoading || !isConnectionReady || donorInfo?.isRegistered
 								}
 								className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
 							>
@@ -403,7 +420,7 @@ export default function TestInterface() {
 
 								<button
 									onClick={handleAddDonation}
-									disabled={isLoading || !connection.isConnected}
+									disabled={isLoading || !isConnectionReady}
 									className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
 								>
 									{isLoading ? '⏳ Загрузка...' : '➕ Добавить донацию'}
@@ -489,3 +506,23 @@ export default function TestInterface() {
 	);
 }
 
+export default function TestInterface() {
+	return (
+		<ClientOnly
+			fallback={
+				<div className="max-w-6xl mx-auto p-6">
+					<div className="text-center">
+						<h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+							🧪 VeDonate Test Interface
+						</h1>
+						<p className="text-gray-600 dark:text-gray-400">
+							Загрузка интерфейса тестирования...
+						</p>
+					</div>
+				</div>
+			}
+		>
+			<TestInterfaceContent />
+		</ClientOnly>
+	);
+}

@@ -54,7 +54,7 @@ export function useVeDonate(): UseVeDonateReturn {
 
 	// Получение данных донора
 	const fetchDonorData = useCallback(async () => {
-		if (!account || !connection.isConnected) {
+		if (!account || !connection.isConnected || !connection.thor) {
 			setDonorInfo(null);
 			setDonorDonations([]);
 			setDonorBadges([]);
@@ -149,11 +149,11 @@ export function useVeDonate(): UseVeDonateReturn {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [account, connection]);
+	}, [account, connection.isConnected, connection.thor]);
 
 	// Получение глобальной статистики
 	const fetchGlobalStats = useCallback(async () => {
-		if (!connection.isConnected) return;
+		if (!connection.isConnected || !connection.thor) return;
 
 		try {
 			const veDonateContract = connection.thor.account(
@@ -172,11 +172,11 @@ export function useVeDonate(): UseVeDonateReturn {
 		} catch (err) {
 			console.error('Ошибка получения статистики:', err);
 		}
-	}, [connection]);
+	}, [connection.isConnected, connection.thor]);
 
 	// Регистрация донора
 	const registerDonor = useCallback(async () => {
-		if (!account || !connection.isConnected) {
+		if (!account || !connection.isConnected || !connection.thor) {
 			throw new Error('Кошелек не подключен');
 		}
 
@@ -201,12 +201,12 @@ export function useVeDonate(): UseVeDonateReturn {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [account, connection, fetchDonorData]);
+	}, [account, connection.isConnected, connection.thor, fetchDonorData]);
 
 	// Добавление донации (только для владельца контракта)
 	const addDonation = useCallback(
 		async (donor: string, type: string, amount: number, centerId: string) => {
-			if (!connection.isConnected) {
+			if (!connection.isConnected || !connection.thor) {
 				throw new Error('Кошелек не подключен');
 			}
 
@@ -240,13 +240,8 @@ export function useVeDonate(): UseVeDonateReturn {
 				setIsLoading(false);
 			}
 		},
-		[connection, fetchDonorData, fetchGlobalStats]
+		[connection.isConnected, connection.thor, fetchDonorData, fetchGlobalStats]
 	);
-
-	// Обновление всех данных
-	const refreshData = useCallback(async () => {
-		await Promise.all([fetchDonorData(), fetchGlobalStats()]);
-	}, [fetchDonorData, fetchGlobalStats]);
 
 	// Утилиты для бейджей
 	const getBadgeName = useCallback((badgeType: BadgeType): string => {
@@ -266,8 +261,21 @@ export function useVeDonate(): UseVeDonateReturn {
 
 	// Загрузка данных при изменении аккаунта
 	useEffect(() => {
-		refreshData();
-	}, [account, connection.isConnected, refreshData]);
+		if (account && connection.isConnected && connection.thor) {
+			Promise.all([fetchDonorData(), fetchGlobalStats()]);
+		}
+	}, [
+		account,
+		connection.isConnected,
+		connection.thor,
+		fetchDonorData,
+		fetchGlobalStats,
+	]);
+
+	// Обновление всех данных (для ручного вызова)
+	const refreshData = useCallback(async () => {
+		await Promise.all([fetchDonorData(), fetchGlobalStats()]);
+	}, [fetchDonorData, fetchGlobalStats]);
 
 	return {
 		donorInfo,

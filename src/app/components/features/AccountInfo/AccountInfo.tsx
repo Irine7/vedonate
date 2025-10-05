@@ -39,7 +39,10 @@ export function AccountInfo() {
 					<b>Wallet</b>
 				</Heading>
 				<Text data-testid="connected-wallet-address">
-					Address: {connectedWallet?.address}
+					Address:{' '}
+					{typeof connectedWallet?.address === 'string'
+						? connectedWallet.address
+						: connectedWallet?.address?.address || 'N/A'}
 				</Text>
 			</Box>
 		</>
