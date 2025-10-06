@@ -25,12 +25,12 @@ export function DonationHistory(): ReactElement {
 		return (
 			<Card bg={cardBg}>
 				<CardHeader>
-					<Heading size="md">📊 История донаций</Heading>
+					<Heading size="md">📊 Donation History</Heading>
 				</CardHeader>
 				<CardBody>
 					<VStack spacing={4}>
 						<Spinner color="red.400" />
-						<Text color="gray.600">Загрузка данных из блокчейна...</Text>
+						<Text color="gray.600">Loading data from blockchain...</Text>
 					</VStack>
 				</CardBody>
 			</Card>
@@ -40,16 +40,16 @@ export function DonationHistory(): ReactElement {
 	return (
 		<Card bg={cardBg}>
 			<CardHeader>
-				<Heading size="md">📊 История донаций</Heading>
+				<Heading size="md">📊 Donation History</Heading>
 			</CardHeader>
 			<CardBody>
 				{donorDonations.length === 0 ? (
 					<Box textAlign="center" py={8}>
 						<Text fontSize="lg" color="gray.500" mb={4}>
-							У вас пока нет донаций
+							You don't have any donations yet
 						</Text>
 						<Text fontSize="sm" color="gray.400">
-							После первой донации здесь появится история из блокчейна
+							After your first donation, blockchain history will appear here
 						</Text>
 					</Box>
 				) : (
@@ -61,16 +61,15 @@ export function DonationHistory(): ReactElement {
 								border="1px solid"
 								borderColor="gray.200"
 								borderRadius="md"
-								_dark={{ borderColor: 'gray.600' }}
 								bg="gray.50"
-								_dark={{ bg: 'gray.700' }}
+								_dark={{ borderColor: 'gray.600', bg: 'gray.700' }}
 							>
 								<HStack justify="space-between" mb={2}>
 									<HStack>
 										<Text fontWeight="bold">
 											{new Date(
 												Number(donation.timestamp) * 1000
-											).toLocaleDateString('ru-RU')}
+											).toLocaleDateString('en-US')}
 										</Text>
 										<Badge
 											colorScheme={
@@ -78,11 +77,11 @@ export function DonationHistory(): ReactElement {
 											}
 											variant="subtle"
 										>
-											{donation.donationType === 'blood' ? 'Кровь' : 'Плазма'}
+											{donation.donationType === 'blood' ? 'Blood' : 'Plasma'}
 										</Badge>
 									</HStack>
 									<Badge colorScheme="green" variant="solid">
-										✓ Подтверждено
+										✓ Confirmed
 									</Badge>
 								</HStack>
 
@@ -109,14 +108,14 @@ export function DonationHistory(): ReactElement {
 									_dark={{ borderColor: 'gray.600' }}
 								>
 									<Text fontSize="xs" color="gray.500">
-										⛓️ Записано в блокчейн VeChain
+										⛓️ Recorded in VeChain blockchain
 									</Text>
 								</Box>
 							</Box>
 						))}
 
 						<Button variant="outline" size="sm">
-							Показать все донации в Explorer
+							View all donations in Explorer
 						</Button>
 					</VStack>
 				)}

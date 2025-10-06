@@ -1,56 +1,56 @@
-# 💰 Получение тестовых VET токенов
+# 💰 Getting Test VET Tokens
 
-## 🎯 **Адрес деплойера для faucet:**
+## 🎯 **Deployer address for faucet:**
 
 ```
 0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07
 ```
 
-## 📋 **Инструкция:**
+## 📋 **Instructions:**
 
-### 1. Откройте VeChain Faucet
+### 1. Open VeChain Faucet
 
-Перейдите по ссылке: **https://faucet.vechain.org/**
+Go to: **https://faucet.vechain.org/**
 
-### 2. Введите адрес деплойера
+### 2. Enter Deployer Address
 
-Скопируйте и вставьте адрес: `0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07`
+Copy and paste address: `0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07`
 
-### 3. Получите токены
+### 3. Get Tokens
 
-Нажмите кнопку "Get VET" и дождитесь получения токенов
+Click "Get VET" button and wait for tokens to be received
 
-### 4. Проверьте баланс
+### 4. Check Balance
 
-Откройте VeChain Explorer: **https://explore-testnet.vechain.org/accounts/0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07**
+Open VeChain Explorer: **https://explore-testnet.vechain.org/accounts/0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07**
 
-## 🔍 **Все тестовые аккаунты:**
+## 🔍 **All Test Accounts:**
 
-| Аккаунт  | Адрес                                        | Роль            |
-| -------- | -------------------------------------------- | --------------- |
-| Деплойер | `0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07` | Запускает тесты |
-| Донор 1  | `0x2406180BCa83983d40191Febc6d939C62152B71b` | Тестовый донор  |
-| Донор 2  | `0xB381e7da548601B1CCB05C66d415b20baE40d828` | Тестовый донор  |
+| Account  | Address                                      | Role       |
+| -------- | -------------------------------------------- | ---------- |
+| Deployer | `0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07` | Runs tests |
+| Donor 1  | `0x2406180BCa83983d40191Febc6d939C62152B71b` | Test donor |
+| Donor 2  | `0xB381e7da548601B1CCB05C66d415b20baE40d828` | Test donor |
 
-## 🚀 **После получения токенов:**
+## 🚀 **After Getting Tokens:**
 
 ```bash
 cd contracts
 
-# Проверить баланс
+# Check balance
 pnpm run address
 
-# Запустить тесты
+# Run tests
 pnpm run test:all
 ```
 
-## ⚠️ **Важные замечания:**
+## ⚠️ **Important Notes:**
 
-- Используйте **только VeChain Testnet**
-- Адреса созданы из тестовой мнемонической фразы
-- **НЕ ИСПОЛЬЗУЙТЕ** эти адреса в mainnet
-- Токены нужны только деплойеру (index 0)
+- Use **VeChain Testnet only**
+- Addresses created from test mnemonic phrase
+- **DO NOT USE** these addresses in mainnet
+- Tokens needed only for deployer (index 0)
 
 ---
 
-**🎉 Готово! После получения токенов можете запускать тесты!**
+**🎉 Ready! After getting tokens you can run tests!**

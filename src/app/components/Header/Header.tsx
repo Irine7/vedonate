@@ -81,10 +81,10 @@ export function Header(): ReactElement {
 	}, []);
 
 	const navItems = [
-		{ label: 'Главная', href: '/' },
-		{ label: 'О платформе', href: '/about' },
-		{ label: 'Статистика', href: '/stats' },
-		{ label: 'Тестирование', href: '/test' },
+		{ label: 'Home', href: '/' },
+		{ label: 'About', href: '/about' },
+		{ label: 'Stats', href: '/stats' },
+		{ label: 'Test', href: '/test' },
 	];
 
 	return (

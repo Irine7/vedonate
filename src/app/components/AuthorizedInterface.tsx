@@ -65,16 +65,16 @@ const AuthorizedInterface: React.FC = () => {
 							<HStack justify="space-between" align="center">
 								<VStack align="start" spacing={2}>
 									<Heading size="lg" color={textColor}>
-										Добро пожаловать!
+										Welcome!
 									</Heading>
 								</VStack>
 								<HStack spacing={4}>
 									<Badge colorScheme="green" px={2} py={1}>
-										🟢 Подключен
+										🟢 Connected
 									</Badge>
 									{isDeployer && (
 										<Badge colorScheme="blue" variant="subtle" px={3} py={1}>
-											🔑 Деплойер
+											🔑 Deployer
 										</Badge>
 									)}
 								</HStack>
@@ -87,7 +87,7 @@ const AuthorizedInterface: React.FC = () => {
 						<Alert status="error" borderRadius="lg">
 							<AlertIcon />
 							<Box>
-								<AlertTitle>Ошибка!</AlertTitle>
+								<AlertTitle>Error!</AlertTitle>
 								<AlertDescription>{error}</AlertDescription>
 							</Box>
 						</Alert>

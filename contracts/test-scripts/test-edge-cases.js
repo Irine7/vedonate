@@ -2,15 +2,16 @@ const { ethers } = require('hardhat');
 
 /**
  * 🧪 Тестирование граничных случаев и ошибок
+ * 🧪 Testing edge cases and errors
  * Проверяет обработку некорректных данных и edge cases
  */
 
 async function edgeCaseTests() {
-	console.log('🚨 Запуск тестов граничных случаев...\n');
+	console.log('🚨 Running edge case tests...\n');
 
 	const [deployer, donor, nonDonor] = await ethers.getSigners();
 
-	// ✅ Адреса деплоенных контрактов VeChain Testnet
+	// ✅ Deployed contracts addresses VeChain Testnet
 	const VEDONATE_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 	const B3TR_ADDRESS = '0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3';
 	const BADGES_ADDRESS = '0x9575e91189e60b4e9a41f136c87d177e42296a88';
@@ -23,147 +24,143 @@ async function edgeCaseTests() {
 			BADGES_ADDRESS
 		);
 
-		// Регистрируем тестового донора (если не зарегистрирован)
-		console.log('👤 Регистрация тестового донора...');
+		// Registering test donor (if not registered)
+		console.log('👤 Registration of test donor...');
 		const isRegistered = await veDonate.isDonorRegistered(donor.address);
 		if (!isRegistered) {
 			const regTx = await veDonate.connect(donor).registerDonor();
 			await regTx.wait();
-			console.log('✅ Донор зарегистрирован');
+			console.log('✅ Donor registered');
 		} else {
-			console.log('✅ Донор уже зарегистрирован');
+			console.log('✅ Donor already registered');
 		}
 		console.log('');
 
-		// Тест 1: Дублирование регистрации
-		console.log('🔄 Тест 1: Попытка повторной регистрации');
+		// Test 1: Duplicate registration
+		console.log('🔄 Test 1: Attempt to duplicate registration');
 		console.log('----------------------------------------');
 
 		try {
 			await veDonate.connect(donor).registerDonor();
-			console.log('❌ ОШИБКА: Повторная регистрация не должна пройти!');
+			console.log('❌ ERROR: Duplicate registration should not pass!');
 		} catch (error) {
-			console.log('✅ Корректно: Повторная регистрация заблокирована');
-			console.log(`   Ошибка: ${error.message}\n`);
+			console.log('✅ Correctly: Duplicate registration blocked');
+			console.log(`   Error: ${error.message}\n`);
 		}
 
-		// Тест 2: Донация незарегистрированным пользователем
-		console.log('🚫 Тест 2: Донация незарегистрированным пользователем');
+		// Test 2: Donation by unregistered user
+		console.log('🚫 Test 2: Donation by unregistered user');
 		console.log('----------------------------------------------');
 
 		try {
 			await veDonate
 				.connect(deployer)
 				.addDonation(nonDonor.address, 'blood', 450, 'test-center');
-			console.log(
-				'❌ ОШИБКА: Донация незарегистрированного пользователя не должна пройти!'
-			);
+			console.log('❌ ERROR: Donation by unregistered user should not pass!');
 		} catch (error) {
-			console.log(
-				'✅ Корректно: Донация незарегистрированного пользователя заблокирована'
-			);
-			console.log(`   Ошибка: ${error.message}\n`);
+			console.log('✅ Correctly: Donation by unregistered user blocked');
+			console.log(`   Error: ${error.message}\n`);
 		}
 
-		// Тест 3: Неверное количество крови (слишком мало)
-		console.log('📉 Тест 3: Недостаточное количество крови');
+		// Test 3: Incorrect amount of blood (too little)
+		console.log('📉 Test 3: Incorrect amount of blood');
 		console.log('----------------------------------------');
 
 		try {
 			await veDonate.connect(deployer).addDonation(
 				donor.address,
 				'blood',
-				100, // Слишком мало
+				100, // Too little
 				'test-center'
 			);
-			console.log('❌ ОШИБКА: Недостаточное количество не должно пройти!');
+			console.log('❌ ERROR: Incorrect amount of blood should not pass!');
 		} catch (error) {
-			console.log('✅ Корректно: Недостаточное количество заблокировано');
-			console.log(`   Ошибка: ${error.message}\n`);
+			console.log('✅ Correctly: Incorrect amount of blood blocked');
+			console.log(`   Error: ${error.message}\n`);
 		}
 
-		// Тест 4: Слишком большое количество
-		console.log('📈 Тест 4: Слишком большое количество крови');
+		// Test 4: Incorrect amount of blood (too much)
+		console.log('📈 Test 4: Incorrect amount of blood');
 		console.log('----------------------------------------');
 
 		try {
 			await veDonate.connect(deployer).addDonation(
 				donor.address,
 				'blood',
-				1000, // Слишком много
+				1000, // Too much
 				'test-center'
 			);
-			console.log('❌ ОШИБКА: Слишком большое количество не должно пройти!');
+			console.log('❌ ERROR: Incorrect amount of blood should not pass!');
 		} catch (error) {
-			console.log('✅ Корректно: Слишком большое количество заблокировано');
-			console.log(`   Ошибка: ${error.message}\n`);
+			console.log('✅ Correctly: Incorrect amount of blood blocked');
+			console.log(`   Error: ${error.message}\n`);
 		}
 
-		// Тест 5: Неверный тип донации
-		console.log('❓ Тест 5: Неверный тип донации');
+		// Test 5: Incorrect donation type
+		console.log('❓ Test 5: Incorrect donation type');
 		console.log('--------------------------------');
 
 		try {
 			await veDonate.connect(deployer).addDonation(
 				donor.address,
-				'urine', // Неверный тип
+				'urine', // Incorrect type
 				450,
 				'test-center'
 			);
-			console.log('❌ ОШИБКА: Неверный тип донации не должен пройти!');
+			console.log('❌ ERROR: Incorrect donation type should not pass!');
 		} catch (error) {
-			console.log('✅ Корректно: Неверный тип донации заблокирован');
-			console.log(`   Ошибка: ${error.message}\n`);
+			console.log('✅ Correctly: Incorrect donation type blocked');
+			console.log(`   Error: ${error.message}\n`);
 		}
 
-		// Тест 6: Корректные значения на границе
-		console.log('⚖️ Тест 6: Граничные значения');
+		// Test 6: Correct values on the edge
+		console.log('⚖️ Test 6: Edge values');
 		console.log('----------------------------');
 
 		try {
-			// Минимальное количество
+			// Minimum amount
 			const tx1 = await veDonate.connect(deployer).addDonation(
 				donor.address,
 				'blood',
-				200, // Минимум
+				200, // Minimum
 				'test-center-min'
 			);
 			await tx1.wait();
-			console.log('✅ Минимальное количество (200 мл) принято');
+			console.log('✅ Minimum amount (200 ml) accepted');
 
-			// Максимальное количество
+			// Maximum amount
 			const tx2 = await veDonate.connect(deployer).addDonation(
 				donor.address,
 				'plasma',
-				500, // Максимум
+				500, // Maximum
 				'test-center-max'
 			);
 			await tx2.wait();
-			console.log('✅ Максимальное количество (500 мл) принято\n');
+			console.log('✅ Maximum amount (500 ml) accepted\n');
 		} catch (error) {
-			console.log('❌ Ошибка с граничными значениями:', error.message);
+			console.log('❌ Error with edge values:', error.message);
 		}
 
-		// Тест 7: Проверка наград после граничных тестов
-		console.log('💰 Тест 7: Проверка наград после граничных тестов');
+		// Test 7: Checking rewards after edge tests
+		console.log('💰 Test 7: Checking rewards after edge tests');
 		console.log('---------------------------------------------');
 
 		const donorInfo = await veDonate.getDonorInfo(donor.address);
 		const b3trBalance = await b3trToken.balanceOf(donor.address);
 		const badges = await donorBadges.getDonorBadges(donor.address);
 
-		console.log('📊 Финальная статистика:');
-		console.log(`- Всего донаций: ${donorInfo.totalDonations}`);
-		console.log(`- B3TR баланс: ${ethers.formatEther(b3trBalance)} B3TR`);
-		console.log(`- NFT бейджи: ${badges.length}`);
+		console.log('📊 Final statistics:');
+		console.log(`- All donations: ${donorInfo.totalDonations}`);
+		console.log(`- B3TR balance: ${ethers.formatEther(b3trBalance)} B3TR`);
+		console.log(`- NFT badges: ${badges.length}`);
 
-		// Тест 8: Проверка событий
-		console.log('\n📡 Тест 8: Проверка событий');
+		// Test 8: Checking events
+		console.log('\n📡 Test 8: Checking events');
 		console.log('----------------------------');
 
-		// Получаем последние транзакции
+		// Getting latest transactions
 		const donations = await veDonate.getDonorDonations(donor.address);
-		console.log(`- Всего донаций в истории: ${donations.length}`);
+		console.log(`- All donations in history: ${donations.length}`);
 
 		// Проверяем детали каждой донации
 		for (let i = 0; i < donations.length; i++) {
@@ -171,38 +168,36 @@ async function edgeCaseTests() {
 			console.log(
 				`  ${i + 1}. ${donationInfo.donationType} - ${
 					donationInfo.amount
-				} мл - ${ethers.formatEther(donationInfo.b3trReward)} B3TR`
+				} ml - ${ethers.formatEther(donationInfo.b3trReward)} B3TR`
 			);
 		}
 
-		// Тест 9: Проверка прав доступа
-		console.log('\n🔐 Тест 9: Проверка прав доступа');
+		// Test 9: Checking access rights
+		console.log('\n🔐 Test 9: Checking access rights');
 		console.log('--------------------------------');
 
 		try {
-			// Попытка донора добавить донацию самому себе
+			// Trying to add donation by donor himself
 			await veDonate
 				.connect(donor)
 				.addDonation(donor.address, 'blood', 450, 'test-center');
-			console.log('❌ ОШИБКА: Донор не должен добавлять донации самому себе!');
+			console.log('❌ ERROR: Donor should not add donations to himself!');
 		} catch (error) {
-			console.log(
-				'✅ Корректно: Только владелец контракта может добавлять донации'
-			);
-			console.log(`   Ошибка: ${error.message}\n`);
+			console.log('✅ Correctly: Only the contract owner can add donations');
+			console.log(`   Error: ${error.message}\n`);
 		}
 
-		console.log('🎉 Все тесты граничных случаев завершены!');
-		console.log('\n📋 Сводка результатов:');
-		console.log('✅ Дублирование регистрации заблокировано');
-		console.log('✅ Донации незарегистрированных пользователей заблокированы');
-		console.log('✅ Неверные количества заблокированы');
-		console.log('✅ Неверные типы донаций заблокированы');
-		console.log('✅ Граничные значения принимаются корректно');
-		console.log('✅ Права доступа работают правильно');
-		console.log('✅ События генерируются корректно');
+		console.log('🎉 All edge case tests completed!');
+		console.log('\n📋 Summary of results:');
+		console.log('✅ Duplicate registration blocked');
+		console.log('✅ Donations by unregistered users blocked');
+		console.log('✅ Incorrect amounts blocked');
+		console.log('✅ Incorrect donation types blocked');
+		console.log('✅ Edge values accepted correctly');
+		console.log('✅ Access rights work correctly');
+		console.log('✅ Events generated correctly');
 	} catch (error) {
-		console.error('💥 Ошибка в тестах граничных случаев:', error);
+		console.error('💥 Error in edge case tests:', error);
 		throw error;
 	}
 }
@@ -210,6 +205,6 @@ async function edgeCaseTests() {
 edgeCaseTests()
 	.then(() => process.exit(0))
 	.catch((error) => {
-		console.error('💥 Тесты граничных случаев провалились:', error);
+		console.error('💥 Edge case tests failed:', error);
 		process.exit(1);
 	});

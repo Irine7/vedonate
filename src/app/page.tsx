@@ -25,12 +25,12 @@ const AuthorizedInterface = dynamic(
 function MainContent() {
 	const { account } = useWallet();
 
-	// Если пользователь авторизован, показываем интерфейс для авторизованных
+	// If user is authorized, show interface for authorized users
 	if (account) {
 		return <AuthorizedInterface />;
 	}
 
-	// Иначе показываем интерфейс для неавторизованных
+	// Otherwise show interface for unauthorized users
 	return <UnauthorizedInterface />;
 }
 
@@ -42,7 +42,7 @@ export default function Page() {
 					<div className="text-center">
 						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
 						<p className="text-gray-600 dark:text-gray-400">
-							Загрузка VeDonate...
+							Loading VeDonate...
 						</p>
 					</div>
 				</div>

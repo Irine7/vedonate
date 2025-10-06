@@ -8,22 +8,22 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title VeDonate
- * @dev Основной смарт-контракт для системы донорства крови
+ * @dev Main smart contract for blood donation system
  */
 contract VeDonate is Ownable, ReentrancyGuard {
     
-    // Структура донации
+    // Donation structure
     struct Donation {
         address donor;
         uint256 timestamp;
-        string donationType; // "blood" или "plasma"
-        uint256 amount;      // количество в мл
-        string centerId;     // ID центра сдачи
-        bool verified;       // подтверждена ли донация
-        uint256 b3trReward;  // начисленные B3TR токены
+        string donationType; // "blood" or "plasma"
+        uint256 amount;      // amount in ml
+        string centerId;     // donation center ID
+        bool verified;       // whether donation is verified
+        uint256 b3trReward;  // awarded B3TR tokens
     }
     
-    // Структура донора
+    // Donor structure
     struct Donor {
         address wallet;
         uint256 totalDonations;
@@ -33,7 +33,7 @@ contract VeDonate is Ownable, ReentrancyGuard {
         uint256 lastDonation;
     }
     
-    // Переменные состояния
+    // State variables
     B3TRToken public b3trToken;
     DonorBadges public donorBadges;
     
@@ -44,7 +44,7 @@ contract VeDonate is Ownable, ReentrancyGuard {
     uint256 public totalDonations;
     uint256 public totalDonors;
     
-    // События
+    // Events
     event DonationAdded(
         address indexed donor,
         uint256 indexed donationId,
@@ -57,7 +57,7 @@ contract VeDonate is Ownable, ReentrancyGuard {
     event DonationVerified(uint256 indexed donationId, bool verified);
     event RewardsDistributed(address indexed donor, uint256 b3trAmount);
     
-    // Ошибки
+    // Errors
     error DonorNotRegistered();
     error DonationAlreadyVerified();
     error InvalidDonationType();
@@ -69,7 +69,7 @@ contract VeDonate is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @dev Регистрация нового донора
+     * @dev Register new donor
      */
     function registerDonor() external {
         require(!donors[msg.sender].isRegistered, "Donor already registered");
@@ -88,11 +88,11 @@ contract VeDonate is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @dev Добавление донации (вызывается только владельцем контракта после AI верификации)
-     * @param donor Адрес донора
-     * @param donationType Тип донации ("blood" или "plasma")
-     * @param amount Количество в мл
-     * @param centerId ID центра сдачи
+     * @dev Add donation (called only by contract owner after AI verification)
+     * @param donor Donor address
+     * @param donationType Donation type ("blood" or "plasma")
+     * @param amount Amount in ml
+     * @param centerId Donation center ID
      */
     function addDonation(
         address donor,
@@ -103,13 +103,13 @@ contract VeDonate is Ownable, ReentrancyGuard {
         if (!donors[donor].isRegistered) revert DonorNotRegistered();
         if (amount < 200 || amount > 500) revert InsufficientAmount();
         
-        // Проверяем тип донации
+        // Check donation type
         bool isPlasma = keccak256(abi.encodePacked(donationType)) == keccak256(abi.encodePacked("plasma"));
         if (!isPlasma && keccak256(abi.encodePacked(donationType)) != keccak256(abi.encodePacked("blood"))) {
             revert InvalidDonationType();
         }
         
-        // Создаем донацию
+        // Create donation
         Donation memory newDonation = Donation({
             donor: donor,
             timestamp: block.timestamp,
@@ -123,7 +123,7 @@ contract VeDonate is Ownable, ReentrancyGuard {
         donations[totalDonations] = newDonation;
         donorDonations[donor].push(totalDonations);
         
-        // Обновляем статистику донора
+        // Update donor statistics
         donors[donor].totalDonations++;
         if (isPlasma) {
             donors[donor].plasmaDonations++;
@@ -133,10 +133,10 @@ contract VeDonate is Ownable, ReentrancyGuard {
         
         totalDonations++;
         
-        // Начисляем B3TR токены
+        // Award B3TR tokens
         b3trToken.rewardDonor(donor, donationType);
         
-        // Проверяем и начисляем бейджи
+        // Check and award badges
         donorBadges.checkAndAwardBadges(
             donor, 
             donors[donor].totalDonations, 
@@ -148,32 +148,32 @@ contract VeDonate is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @dev Получить информацию о доноре
-     * @param donor Адрес донора
+     * @dev Get donor information
+     * @param donor Donor address
      */
     function getDonorInfo(address donor) external view returns (Donor memory) {
         return donors[donor];
     }
     
     /**
-     * @dev Получить донации донора
-     * @param donor Адрес донора
-     * @return Массив ID донаций
+     * @dev Get donor donations
+     * @param donor Donor address
+     * @return Array of donation IDs
      */
     function getDonorDonations(address donor) external view returns (uint256[] memory) {
         return donorDonations[donor];
     }
     
     /**
-     * @dev Получить информацию о донации
-     * @param donationId ID донации
+     * @dev Get donation information
+     * @param donationId Donation ID
      */
     function getDonationInfo(uint256 donationId) external view returns (Donation memory) {
         return donations[donationId];
     }
     
     /**
-     * @dev Получить общую статистику
+     * @dev Get global statistics
      */
     function getGlobalStats() external view returns (
         uint256 _totalDonations,
@@ -183,7 +183,7 @@ contract VeDonate is Ownable, ReentrancyGuard {
         _totalDonations = totalDonations;
         _totalDonors = totalDonors;
         
-        // Подсчитываем общее количество распределенных B3TR
+        // Calculate total distributed B3TR amount
         uint256 totalB3TR = 0;
         for (uint256 i = 0; i < totalDonations; i++) {
             totalB3TR += donations[i].b3trReward;
@@ -192,28 +192,28 @@ contract VeDonate is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @dev Проверить, зарегистрирован ли донор
+     * @dev Check if donor is registered
      */
     function isDonorRegistered(address donor) external view returns (bool) {
         return donors[donor].isRegistered;
     }
     
     /**
-     * @dev Получить баланс B3TR донора
+     * @dev Get donor B3TR balance
      */
     function getDonorB3TRBalance(address donor) external view returns (uint256) {
         return b3trToken.balanceOf(donor);
     }
     
     /**
-     * @dev Получить бейджи донора
+     * @dev Get donor badges
      */
     function getDonorBadges(address donor) external view returns (uint256[] memory) {
         return donorBadges.getDonorBadges(donor);
     }
     
     /**
-     * @dev Обновить адреса токенов и бейджей (только владелец)
+     * @dev Update token and badge addresses (owner only)
      */
     function updateTokenAddresses(address _b3trToken, address _donorBadges) external onlyOwner {
         b3trToken = B3TRToken(_b3trToken);

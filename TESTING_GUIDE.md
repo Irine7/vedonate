@@ -1,161 +1,161 @@
-# 🧪 Руководство по тестированию смарт-контрактов VeDonate
+# 🧪 VeDonate Smart Contracts Testing Guide
 
-## 📋 Предварительные требования
+## 📋 Prerequisites
 
-### Инструменты:
+### Tools:
 
-- ✅ VeWorld Wallet (установлен в браузере)
-- ✅ Тестовые VET токены (для оплаты газа)
+- ✅ VeWorld Wallet (installed in browser)
+- ✅ Test VET tokens (for gas fees)
 - ✅ Node.js 18+
 - ✅ Git
 
-### Подготовка:
+### Preparation:
 
-1. **Установите VeWorld Wallet**: https://www.veworld.net/
-2. **Получите тестовые VET**: https://faucet.vecha.in/
-3. **Переключитесь на VeChain Testnet** в кошельке
+1. **Install VeWorld Wallet**: https://www.veworld.net/
+2. **Get test VET**: https://faucet.vecha.in/
+3. **Switch to VeChain Testnet** in wallet
 
-## 🔧 Шаг 1: Деплой контрактов
+## 🔧 Step 1: Deploy Contracts
 
-### Установка зависимостей
+### Install Dependencies
 
 ```bash
 cd contracts
 npm install
 ```
 
-### Настройка приватного ключа
+### Setup Private Key
 
-Создайте файл `.env` в папке `contracts`:
+Create `.env` file in `contracts` folder:
 
 ```env
-PRIVATE_KEY=ваш_приватный_ключ_для_деплоя
+PRIVATE_KEY=your_private_key_for_deployment
 ```
 
-**⚠️ Важно**: Используйте тестовый кошелек, НЕ основной!
+**⚠️ Important**: Use test wallet, NOT main wallet!
 
-### Деплой в тестнет
+### Deploy to Testnet
 
 ```bash
 npm run deploy:testnet
 ```
 
-После успешного деплоя вы получите:
+After successful deployment you will get:
 
 ```
-✅ B3TR Token деплоен по адресу: 0x...
-✅ Donor Badges деплоен по адресу: 0x...
-✅ VeDonate деплоен по адресу: 0x...
+✅ B3TR Token deployed at address: 0x...
+✅ Donor Badges deployed at address: 0x...
+✅ VeDonate deployed at address: 0x...
 ```
 
-## 🔗 Шаг 2: Обновление адресов в фронтенде
+## 🔗 Step 2: Update Frontend Addresses
 
-Обновите файл `src/lib/contracts.ts`:
+Update file `src/lib/contracts.ts`:
 
 ```typescript
 export const CONTRACT_ADDRESSES = {
-	B3TR_TOKEN: '0x...', // Замените на реальный адрес
-	DONOR_BADGES: '0x...', // Замените на реальный адрес
-	VEDONATE: '0x...', // Замените на реальный адрес
+	B3TR_TOKEN: '0x...', // Replace with actual address
+	DONOR_BADGES: '0x...', // Replace with actual address
+	VEDONATE: '0x...', // Replace with actual address
 };
 ```
 
-## 🧪 Шаг 3: Тестирование через фронтенд
+## 🧪 Step 3: Testing via Frontend
 
-### Запуск приложения
+### Start Application
 
 ```bash
 pnpm run dev
 ```
 
-### Тестовые сценарии:
+### Test Scenarios:
 
-#### 3.1 Подключение кошелька
+#### 3.1 Wallet Connection
 
-1. Откройте http://localhost:3000
-2. Нажмите "Подключить VeWorld Wallet"
-3. Выберите аккаунт в кошельке
-4. Подтвердите подключение
+1. Open http://localhost:3000
+2. Click "Connect VeWorld Wallet"
+3. Select account in wallet
+4. Confirm connection
 
-**✅ Ожидаемый результат**: Кошелек подключен, адрес отображается
+**✅ Expected Result**: Wallet connected, address displayed
 
-#### 3.2 Регистрация донора
+#### 3.2 Donor Registration
 
-1. Нажмите "🔗 Зарегистрироваться как донор"
-2. Подтвердите транзакцию в кошельке
-3. Дождитесь подтверждения
+1. Click "🔗 Register as donor"
+2. Confirm transaction in wallet
+3. Wait for confirmation
 
-**✅ Ожидаемый результат**:
+**✅ Expected Result**:
 
-- Транзакция успешна
-- Статус "Зарегистрирован"
-- Появился дашборд донора
+- Transaction successful
+- Status "Registered"
+- Donor dashboard appeared
 
-#### 3.3 Загрузка справки о донации
+#### 3.3 Upload Donation Certificate
 
-1. Выберите тип донации (кровь/плазма)
-2. Укажите количество мл
-3. Выберите центр сдачи
-4. Загрузите любое изображение (для теста)
-5. Нажмите "Загрузить и записать в блокчейн"
+1. Select donation type (blood/plasma)
+2. Specify amount in ml
+3. Select donation center
+4. Upload any image (for testing)
+5. Click "Upload and record in blockchain"
 
-**✅ Ожидаемый результат**:
+**✅ Expected Result**:
 
-- Прогресс-бар загрузки
-- AI "анализ" документа
-- Запись в блокчейн
-- Получение B3TR токенов
+- Upload progress bar
+- AI "analysis" of document
+- Recording in blockchain
+- Receiving B3TR tokens
 
-#### 3.4 Проверка наград
+#### 3.4 Check Rewards
 
-После добавления донации проверьте:
+After adding donation check:
 
-- **B3TR токены**: +10 за кровь, +15 за плазму
-- **NFT бейдж**: "Первая донация" должна появиться
-- **История донаций**: запись в списке
+- **B3TR tokens**: +10 for blood, +15 for plasma
+- **NFT badge**: "First Donation" should appear
+- **Donation history**: record in list
 
-## 🔍 Шаг 4: Проверка в VeChain Explorer
+## 🔍 Step 4: Check in VeChain Explorer
 
-### Просмотр транзакций
+### View Transactions
 
-1. Откройте https://explore-testnet.vechain.org
-2. Вставьте адрес вашего кошелька
-3. Найдите транзакции:
+1. Open https://explore-testnet.vechain.org
+2. Paste your wallet address
+3. Find transactions:
    - `registerDonor`
    - `addDonation`
    - `rewardDonor`
 
-### Просмотр событий
+### View Events
 
-В каждой транзакции найдите события:
+In each transaction find events:
 
 - `DonorRegistered`
 - `DonationAdded`
 - `TokensRewarded`
 - `BadgeMinted`
 
-## 🧪 Шаг 5: Тестирование через консоль браузера
+## 🧪 Step 5: Testing via Browser Console
 
-### Проверка состояния контрактов
+### Check Contract State
 
-Откройте DevTools (F12) и выполните:
+Open DevTools (F12) and execute:
 
 ```javascript
-// Получение информации о доноре
+// Get donor information
 const donorInfo = await window.vechainKit.connection.thor
 	.account('0x...VEDONATE_ADDRESS')
 	.read([
 		{
 			abi: VEDONATE_ABI,
 			method: 'getDonorInfo',
-			args: ['ВАШ_АДРЕС'],
+			args: ['YOUR_ADDRESS'],
 		},
 	]);
 
 console.log('Donor Info:', donorInfo[0]);
 ```
 
-### Проверка баланса B3TR
+### Check B3TR Balance
 
 ```javascript
 const balance = await window.vechainKit.connection.thor
@@ -164,28 +164,28 @@ const balance = await window.vechainKit.connection.thor
 		{
 			abi: B3TR_TOKEN_ABI,
 			method: 'balanceOf',
-			args: ['ВАШ_АДРЕС'],
+			args: ['YOUR_ADDRESS'],
 		},
 	]);
 
 console.log('B3TR Balance:', Number(balance[0]) / 1e18);
 ```
 
-## 🔧 Шаг 6: Тестирование через Hardhat
+## 🔧 Step 6: Testing via Hardhat
 
-### Создание тестового скрипта
+### Create Test Script
 
-Создайте файл `contracts/test-interaction.js`:
+Create file `contracts/test-interaction.js`:
 
 ```javascript
 const { ethers } = require('hardhat');
 
 async function testContracts() {
-	console.log('🧪 Тестирование контрактов VeDonate...');
+	console.log('🧪 Testing VeDonate contracts...');
 
 	const [deployer, donor] = await ethers.getSigners();
 
-	// Получаем контракты
+	// Get contracts
 	const veDonate = await ethers.getContractAt(
 		'VeDonate',
 		'0x...VEDONATE_ADDRESS'
@@ -199,126 +199,122 @@ async function testContracts() {
 		'0x...BADGES_ADDRESS'
 	);
 
-	// Тест 1: Регистрация донора
-	console.log('📝 Тест 1: Регистрация донора...');
+	// Test 1: Donor registration
+	console.log('📝 Test 1: Donor registration...');
 	const tx1 = await veDonate.connect(donor).registerDonor();
 	await tx1.wait();
-	console.log('✅ Донор зарегистрирован');
+	console.log('✅ Donor registered');
 
-	// Тест 2: Добавление донации
-	console.log('🩸 Тест 2: Добавление донации...');
+	// Test 2: Adding donation
+	console.log('🩸 Test 2: Adding donation...');
 	const tx2 = await veDonate
 		.connect(deployer)
 		.addDonation(donor.address, 'blood', 450, 'test-center-001');
 	await tx2.wait();
-	console.log('✅ Донация добавлена');
+	console.log('✅ Donation added');
 
-	// Тест 3: Проверка наград
-	console.log('💰 Тест 3: Проверка наград...');
+	// Test 3: Check rewards
+	console.log('💰 Test 3: Check rewards...');
 	const donorInfo = await veDonate.getDonorInfo(donor.address);
 	const b3trBalance = await b3trToken.balanceOf(donor.address);
 	const badges = await donorBadges.getDonorBadges(donor.address);
 
-	console.log('📊 Результаты:');
-	console.log('- Всего донаций:', donorInfo.totalDonations.toString());
-	console.log('- B3TR баланс:', ethers.formatEther(b3trBalance));
-	console.log('- Количество бейджей:', badges.length);
+	console.log('📊 Results:');
+	console.log('- Total donations:', donorInfo.totalDonations.toString());
+	console.log('- B3TR balance:', ethers.formatEther(b3trBalance));
+	console.log('- Number of badges:', badges.length);
 
-	console.log('🎉 Все тесты пройдены!');
+	console.log('🎉 All tests passed!');
 }
 
 testContracts()
 	.then(() => process.exit(0))
 	.catch((error) => {
-		console.error('❌ Ошибка тестирования:', error);
+		console.error('❌ Testing error:', error);
 		process.exit(1);
 	});
 ```
 
-### Запуск тестов
+### Run Tests
 
 ```bash
 cd contracts
 npx hardhat run test-interaction.js --network vechain_testnet
 ```
 
-## 🚨 Возможные проблемы и решения
+## 🚨 Possible Issues and Solutions
 
-### Проблема: "Insufficient VTHO"
+### Issue: "Insufficient VTHO"
 
-**Решение**: Получите больше тестовых VET токенов:
+**Solution**: Get more test VET tokens:
 
 - https://faucet.vecha.in/
 - https://faucet.vechain.org/
 
-### Проблема: "Contract not found"
+### Issue: "Contract not found"
 
-**Решение**:
+**Solution**:
 
-1. Проверьте адреса контрактов
-2. Убедитесь, что контракты задеплоены
-3. Проверьте подключение к тестнету
+1. Check contract addresses
+2. Make sure contracts are deployed
+3. Check connection to testnet
 
-### Проблема: "Transaction failed"
+### Issue: "Transaction failed"
 
-**Решение**:
+**Solution**:
 
-1. Проверьте баланс VET
-2. Увеличьте gas limit
-3. Проверьте права доступа
+1. Check VET balance
+2. Increase gas limit
+3. Check access permissions
 
-### Проблема: "Invalid donation type"
+### Issue: "Invalid donation type"
 
-**Решение**: Используйте только "blood" или "plasma"
+**Solution**: Use only "blood" or "plasma"
 
-## 📊 Ожидаемые результаты тестирования
+## 📊 Expected Testing Results
 
-### После первой донации:
+### After first donation:
 
-- ✅ Донор зарегистрирован
-- ✅ 1 донация в истории
-- ✅ 10 B3TR токенов (за кровь)
-- ✅ 1 NFT бейдж "Первая донация"
+- ✅ Donor registered
+- ✅ 1 donation in history
+- ✅ 10 B3TR tokens (for blood)
+- ✅ 1 NFT badge "First Donation"
 
-### После 5 донаций:
+### After 5 donations:
 
-- ✅ 5 донаций в истории
-- ✅ 50 B3TR токенов
-- ✅ 2 NFT бейджа (Первая + Бронзовая)
+- ✅ 5 donations in history
+- ✅ 50 B3TR tokens
+- ✅ 2 NFT badges (First + Bronze)
 
-### После 10 донаций:
+### After 10 donations:
 
-- ✅ 10 донаций в истории
-- ✅ 100 B3TR токенов
-- ✅ 3 NFT бейджа (Первая + Бронзовая + Серебряная)
+- ✅ 10 donations in history
+- ✅ 100 B3TR tokens
+- ✅ 3 NFT badges (First + Bronze + Silver)
 
-## 🎯 Дополнительные тесты
+## 🎯 Additional Tests
 
-### Тест граничных случаев:
+### Edge Cases Test:
 
-1. **Дублирование донаций**: Попробуйте добавить донацию дважды
-2. **Неверные параметры**: Тест с amount < 200 или > 500
-3. **Незарегистрированный донор**: Попробуйте добавить донацию без регистрации
+1. **Donation duplication**: Try to add donation twice
+2. **Invalid parameters**: Test with amount < 200 or > 500
+3. **Unregistered donor**: Try to add donation without registration
 
-### Тест производительности:
+### Performance Test:
 
-1. **Множественные донации**: Добавьте 10+ донаций
-2. **Проверка газа**: Отследите расход газа
-3. **Время выполнения**: Измерьте время транзакций
+1. **Multiple donations**: Add 10+ donations
+2. **Gas check**: Track gas usage
+3. **Execution time**: Measure transaction time
 
-## 📝 Чек-лист тестирования
+## 📝 Testing Checklist
 
-- [ ] Кошелек подключается
-- [ ] Регистрация донора работает
-- [ ] Добавление донации работает
-- [ ] B3TR токены начисляются
-- [ ] NFT бейджи создаются
-- [ ] История донаций отображается
-- [ ] Глобальная статистика обновляется
-- [ ] Все события генерируются
-- [ ] Транзакции видны в Explorer
-- [ ] Граничные случаи обрабатываются
-
----
-
-**🎉 Поздравляем! Если все тесты пройдены, ваши смарт-контракты работают корректно!**
+- [ ] Wallet connects
+- [ ] Donor registration works
+- [ ] Adding donation works
+- [ ] B3TR tokens are awarded
+- [ ] NFT badges are created
+- [ ] Donation history is displayed
+- [ ] Global statistics are updated
+- [ ] All events are generated
+- [ ] Transactions are visible in Explorer
+- [ ] Edge cases are handled

@@ -29,11 +29,10 @@ import {
 } from '@chakra-ui/react';
 import { useSafeWallet } from '@/hooks/useSafeWallet';
 import { useVeDonate } from '@/hooks/useVeDonate';
-import { WelcomeSection } from './WelcomeSection';
+import { WelcomeSection } from '../features/WelcomeSection/WelcomeSection';
 import { DonationHistory } from './DonationHistory';
 import { UploadCertificate } from './UploadCertificate';
 import { DonorBadges } from './DonorBadges';
-import { AIAssistant } from './AIAssistant';
 
 export default function VeDonateHome(): ReactElement {
 	const { account, connection } = useSafeWallet();
@@ -56,7 +55,7 @@ export default function VeDonateHome(): ReactElement {
 			<Container maxW="container.xl" py={8}>
 				<VStack spacing={4}>
 					<Spinner size="xl" color="red.400" />
-					<Text>Загрузка данных из блокчейна...</Text>
+					<Text>Loading data from blockchain...</Text>
 				</VStack>
 			</Container>
 		);
@@ -80,24 +79,15 @@ export default function VeDonateHome(): ReactElement {
 					<Card bg={cardBg}>
 						<CardBody textAlign="center" py={12}>
 							<Heading size="lg" mb={4}>
-								🩸 Добро пожаловать в VeDonate!
+								🩸 Welcome to VeDonate!
 							</Heading>
 							<Text fontSize="lg" mb={6} color="gray.600">
-								Для участия в системе донорства необходимо зарегистрироваться в
-								блокчейне
+								To participate in the donation system, you need to register in
+								the blockchain
 							</Text>
 							<Text fontSize="md" mb={8} color="gray.500">
-								Регистрация бесплатная и займет всего несколько секунд
+								Registration is free and takes just a few seconds
 							</Text>
-							<Button
-								colorScheme="red"
-								size="lg"
-								onClick={registerDonor}
-								isLoading={isLoading}
-								loadingText="Регистрация..."
-							>
-								🔗 Зарегистрироваться как донор
-							</Button>
 						</CardBody>
 					</Card>
 
@@ -111,7 +101,7 @@ export default function VeDonateHome(): ReactElement {
 									B3TR Rewards
 								</Heading>
 								<Text color="gray.600">
-									Получайте токены B3TR за каждую подтверждённую донацию
+									Receive B3TR tokens for each confirmed donation
 								</Text>
 							</CardBody>
 						</Card>
@@ -122,10 +112,10 @@ export default function VeDonateHome(): ReactElement {
 									<Text fontSize="4xl">🏆</Text>
 								</Icon>
 								<Heading size="md" mb={3}>
-									NFT Бейджи
+									NFT Badges
 								</Heading>
 								<Text color="gray.600">
-									Собирайте уникальные NFT-бейджи за достижения в донорстве
+									Collect unique NFT badges for donation achievements
 								</Text>
 							</CardBody>
 						</Card>
@@ -136,10 +126,10 @@ export default function VeDonateHome(): ReactElement {
 									<Text fontSize="4xl">🤖</Text>
 								</Icon>
 								<Heading size="md" mb={3}>
-									AI Верификация
+									AI Verification
 								</Heading>
 								<Text color="gray.600">
-									Искусственный интеллект проверяет и подтверждает ваши донации
+									Artificial intelligence verifies and confirms your donations
 								</Text>
 							</CardBody>
 						</Card>
@@ -170,11 +160,11 @@ export default function VeDonateHome(): ReactElement {
 						🩸 VeDonate Dashboard
 					</Heading>
 					<Text fontSize="xl" color="gray.600" maxW="2xl" mx="auto">
-						Добро пожаловать, донор! Ваши данные синхронизированы с блокчейном
+						Welcome, donor! Your data is synchronized with the blockchain
 					</Text>
 					{isDeployer && (
 						<Badge colorScheme="purple" mt={2} fontSize="sm">
-							👑 Администратор системы
+							👑 System Administrator
 						</Badge>
 					)}
 				</Box>
@@ -184,13 +174,13 @@ export default function VeDonateHome(): ReactElement {
 					<Card bg={cardBg}>
 						<CardBody>
 							<Stat>
-								<StatLabel>Всего донаций</StatLabel>
+								<StatLabel>Total Donations</StatLabel>
 								<StatNumber color="red.400">
 									{Number(donorInfo?.totalDonations || 0n)}
 								</StatNumber>
 								<StatHelpText>
 									<StatArrow type="increase" />
-									Активный донор
+									Active Donor
 								</StatHelpText>
 							</Stat>
 						</CardBody>
@@ -199,11 +189,11 @@ export default function VeDonateHome(): ReactElement {
 					<Card bg={cardBg}>
 						<CardBody>
 							<Stat>
-								<StatLabel>B3TR Токены</StatLabel>
+								<StatLabel>B3TR Tokens</StatLabel>
 								<StatNumber color="orange.400">
 									{Number(b3trBalance / 10n ** 18n)} B3TR
 								</StatNumber>
-								<StatHelpText>Заработано за донации</StatHelpText>
+								<StatHelpText>Earned from donations</StatHelpText>
 							</Stat>
 						</CardBody>
 					</Card>
@@ -211,11 +201,11 @@ export default function VeDonateHome(): ReactElement {
 					<Card bg={cardBg}>
 						<CardBody>
 							<Stat>
-								<StatLabel>NFT Бейджи</StatLabel>
+								<StatLabel>NFT Badges</StatLabel>
 								<StatNumber color="purple.400">
 									{Number(donorInfo?.totalDonations || 0n) > 0 ? '1' : '0'}
 								</StatNumber>
-								<StatHelpText>Получено достижений</StatHelpText>
+								<StatHelpText>Achievements earned</StatHelpText>
 							</Stat>
 						</CardBody>
 					</Card>
@@ -223,11 +213,11 @@ export default function VeDonateHome(): ReactElement {
 					<Card bg={cardBg}>
 						<CardBody>
 							<Stat>
-								<StatLabel>Глобальная статистика</StatLabel>
+								<StatLabel>Global Statistics</StatLabel>
 								<StatNumber color="green.400">
 									{globalStats ? Number(globalStats.totalDonations) : 0}
 								</StatNumber>
-								<StatHelpText>Всего донаций в системе</StatHelpText>
+								<StatHelpText>Total donations in system</StatHelpText>
 							</Stat>
 						</CardBody>
 					</Card>
@@ -238,7 +228,7 @@ export default function VeDonateHome(): ReactElement {
 					{/* Upload Certificate */}
 					<Card bg={cardBg}>
 						<CardHeader>
-							<Heading size="md">📸 Загрузить справку о донации</Heading>
+							<Heading size="md">📸 Upload Donation Certificate</Heading>
 						</CardHeader>
 						<CardBody>
 							<UploadCertificate />
@@ -248,10 +238,12 @@ export default function VeDonateHome(): ReactElement {
 					{/* AI Assistant */}
 					<Card bg={cardBg}>
 						<CardHeader>
-							<Heading size="md">🤖 AI Помощник</Heading>
+							<Heading size="md">🤖 AI Assistant</Heading>
 						</CardHeader>
 						<CardBody>
-							<AIAssistant />
+							<Text color="gray.500">
+								AI Assistant will be added in future versions
+							</Text>
 						</CardBody>
 					</Card>
 				</SimpleGrid>
@@ -270,23 +262,23 @@ export default function VeDonateHome(): ReactElement {
 				>
 					<CardBody textAlign="center" py={8}>
 						<Heading size="md" mb={4}>
-							⛓️ Блокчейн данные
+							⛓️ Blockchain Data
 						</Heading>
 						<Text fontSize="sm" color="gray.600" mb={4}>
-							Ваши донации зафиксированы в VeChain блокчейне
+							Your donations are recorded in VeChain blockchain
 						</Text>
 						<HStack justify="center" spacing={4} fontSize="xs" color="gray.500">
 							<Text>
-								Адрес: {account?.slice(0, 6)}...{account?.slice(-4)}
+								Address: {account?.slice(0, 6)}...{account?.slice(-4)}
 							</Text>
 							<Text>•</Text>
 							<Text>
-								Последняя донация:{' '}
+								Last donation:{' '}
 								{donorInfo?.lastDonation
 									? new Date(
 											Number(donorInfo.lastDonation) * 1000
 									  ).toLocaleDateString()
-									: 'Нет'}
+									: 'None'}
 							</Text>
 						</HStack>
 					</CardBody>

@@ -1,16 +1,16 @@
 const { ethers } = require('hardhat');
 
 /**
- * 🏆 Тестирование системы NFT бейджей
- * Проверяет автоматическое начисление бейджей за достижения
+ * 🏆 Testing the NFT badges system
+ * Checks automatic awarding of badges for achievements
  */
 
 async function badgeTests() {
-	console.log('🏆 Запуск тестов NFT бейджей...\n');
+	console.log('🏆 Running NFT badges tests...\n');
 
 	const [deployer, donor] = await ethers.getSigners();
 
-	// ✅ Адреса деплоенных контрактов VeChain Testnet
+	// ✅ Deployed contracts addresses VeChain Testnet
 	const VEDONATE_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 	const B3TR_ADDRESS = '0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3';
 	const BADGES_ADDRESS = '0x9575e91189e60b4e9a41f136c87d177e42296a88';
@@ -23,29 +23,29 @@ async function badgeTests() {
 			BADGES_ADDRESS
 		);
 
-		// Регистрируем тестового донора (если не зарегистрирован)
-		console.log('👤 Регистрация тестового донора...');
+		// Registering the test donor (if not registered)
+		console.log('👤 Registering the test donor...');
 		const isRegistered = await veDonate.isDonorRegistered(donor.address);
 		if (!isRegistered) {
 			const regTx = await veDonate.connect(donor).registerDonor();
 			await regTx.wait();
-			console.log('✅ Донор зарегистрирован');
+			console.log('✅ Donor registered');
 		} else {
-			console.log('✅ Донор уже зарегистрирован');
+			console.log('✅ Donor already registered');
 		}
 		console.log('');
 
-		// Функция для проверки бейджей
+		// Function to check badges
 		const checkBadges = async (expectedCount, milestone) => {
 			const badges = await donorBadges.getDonorBadges(donor.address);
-			console.log(`📊 После ${milestone}: ${badges.length} бейджей`);
+			console.log(`📊 After ${milestone}: ${badges.length} badges`);
 
 			// Проверяем каждый бейдж
 			for (let i = 0; i < badges.length; i++) {
 				const tokenId = badges[i];
 				const tokenURI = await donorBadges.tokenURI(tokenId);
 				console.log(
-					`   🏆 Бейдж ${i + 1}: ID ${tokenId} - ${tokenURI.substring(
+					`   🏆 Badge ${i + 1}: ID ${tokenId} - ${tokenURI.substring(
 						0,
 						50
 					)}...`
@@ -53,31 +53,31 @@ async function badgeTests() {
 			}
 
 			if (badges.length === expectedCount) {
-				console.log(`✅ Корректно: ${expectedCount} бейджей получено`);
+				console.log(`✅ Correctly: ${expectedCount} badges received`);
 			} else {
 				console.log(
-					`❌ Ошибка: ожидалось ${expectedCount}, получено ${badges.length}`
+					`❌ Error: expected ${expectedCount}, received ${badges.length}`
 				);
 			}
 			console.log('');
 		};
 
-		// Тест 1: Первая донация - бейдж "Первая донация"
-		console.log('🥉 Тест 1: Первая донация');
+		// Test 1: First donation - badge "First donation"
+		console.log('🥉 Test 1: First donation');
 		console.log('------------------------');
 
 		const tx1 = await veDonate
 			.connect(deployer)
 			.addDonation(donor.address, 'blood', 450, 'center-001');
 		await tx1.wait();
-		console.log('✅ Добавлена первая донация (кровь)');
-		await checkBadges(1, 'первой донации');
+		console.log('✅ First donation added (blood)');
+		await checkBadges(1, 'first donation');
 
-		// Тест 2: Достижение 5 донаций - бейдж "Бронзовый донор"
-		console.log('🥉 Тест 2: Достижение бронзового статуса');
+		// Test 2: Achievement of 5 donations - badge "Bronze donor"
+		console.log('🥉 Test 2: Achievement of bronze status');
 		console.log('---------------------------------------');
 
-		// Добавляем еще 4 донации
+		// Adding another 4 donations
 		for (let i = 2; i <= 5; i++) {
 			const tx = await veDonate
 				.connect(deployer)
@@ -88,16 +88,16 @@ async function badgeTests() {
 					`center-${i.toString().padStart(3, '0')}`
 				);
 			await tx.wait();
-			console.log(`✅ Добавлена донация ${i}/5`);
+			console.log(`✅ Donation ${i}/5 added`);
 		}
 
-		await checkBadges(2, '5 донаций (бронзовый статус)');
+		await checkBadges(2, '5 donations (bronze status)');
 
-		// Тест 3: Достижение 10 донаций - бейдж "Серебряный донор"
-		console.log('🥈 Тест 3: Достижение серебряного статуса');
+		// Test 3: Achievement of 10 donations - badge "Silver donor"
+		console.log('🥈 Test 3: Achievement of silver status');
 		console.log('---------------------------------------');
 
-		// Добавляем еще 5 донаций
+		// Adding another 5 donations
 		for (let i = 6; i <= 10; i++) {
 			const tx = await veDonate
 				.connect(deployer)
@@ -108,16 +108,16 @@ async function badgeTests() {
 					`center-${i.toString().padStart(3, '0')}`
 				);
 			await tx.wait();
-			console.log(`✅ Добавлена донация ${i}/10`);
+			console.log(`✅ Donation ${i}/10 added`);
 		}
 
-		await checkBadges(3, '10 донаций (серебряный статус)');
+		await checkBadges(3, '10 donations (silver status)');
 
-		// Тест 4: Достижение 25 донаций - бейдж "Золотой донор"
-		console.log('🥇 Тест 4: Достижение золотого статуса');
+		// Test 4: Achievement of 25 donations - badge "Gold donor"
+		console.log('🥇 Test 4: Achievement of gold status');
 		console.log('------------------------------------');
 
-		// Добавляем еще 15 донаций (оптимизированно - добавляем по 5 за раз)
+		// Adding another 15 donations (optimized - adding 5 at a time)
 		for (let batch = 0; batch < 3; batch++) {
 			for (let i = 0; i < 5; i++) {
 				const donationNumber = 11 + batch * 5 + i;
@@ -131,16 +131,16 @@ async function badgeTests() {
 					);
 				await tx.wait();
 			}
-			console.log(`✅ Добавлена партия ${batch + 1}/3 донаций`);
+			console.log(`✅ Batch ${batch + 1}/3 donations added`);
 		}
 
-		await checkBadges(4, '25 донаций (золотой статус)');
+		await checkBadges(4, '25 donations (gold status)');
 
-		// Тест 5: Достижение 50 донаций - бейдж "Спасатель жизней"
-		console.log('❤️ Тест 5: Достижение статуса "Спасатель жизней"');
+		// Test 5: Achievement of 50 donations - badge "Life saver"
+		console.log('❤️ Test 5: Achievement of life saver status');
 		console.log('--------------------------------------------');
 
-		// Добавляем еще 25 донаций (по 5 за раз для оптимизации)
+		// Adding another 25 donations (optimized - adding 5 at a time)
 		for (let batch = 0; batch < 5; batch++) {
 			for (let i = 0; i < 5; i++) {
 				const donationNumber = 26 + batch * 5 + i;
@@ -154,32 +154,32 @@ async function badgeTests() {
 					);
 				await tx.wait();
 			}
-			console.log(`✅ Добавлена партия ${batch + 1}/5 донаций`);
+			console.log(`✅ Batch ${batch + 1}/5 donations added`);
 		}
 
-		await checkBadges(5, '50 донаций (спасатель жизней)');
+		await checkBadges(5, '50 donations (life saver)');
 
-		// Тест 6: Создание нового донора для тестирования плазмы
-		console.log('💧 Тест 6: Тестирование бейджа "Мастер плазмы"');
+		// Test 6: Creating a new donor for testing plasma
+		console.log('💧 Test 6: Testing the plasma master badge');
 		console.log('-------------------------------------------');
 
-		// Используем существующий аккаунт для второго донора
+		// Using an existing account for the second donor
 		const signers = await ethers.getSigners();
-		const donor2Wallet = signers[2]; // Используем третий аккаунт
+		const donor2Wallet = signers[2]; // Using the third account
 
-		// Проверяем, зарегистрирован ли уже
+		// Checking if already registered
 		const isRegistered2 = await veDonate.isDonorRegistered(
 			donor2Wallet.address
 		);
 		if (!isRegistered2) {
 			const regTx2 = await veDonate.connect(donor2Wallet).registerDonor();
 			await regTx2.wait();
-			console.log('✅ Второй донор зарегистрирован');
+			console.log('✅ Second donor registered');
 		} else {
-			console.log('✅ Второй донор уже зарегистрирован');
+			console.log('✅ Second donor already registered');
 		}
 
-		// Добавляем 10 донаций плазмы
+		// Adding 10 plasma donations
 		for (let i = 1; i <= 10; i++) {
 			const tx = await veDonate
 				.connect(deployer)
@@ -190,83 +190,81 @@ async function badgeTests() {
 					`plasma-center-${i.toString().padStart(3, '0')}`
 				);
 			await tx.wait();
-			console.log(`✅ Добавлена донация плазмы ${i}/10`);
+			console.log(`✅ Plasma donation ${i}/10 added`);
 		}
 
 		const badges2 = await donorBadges.getDonorBadges(donor2Wallet.address);
-		console.log(`📊 Donor 2 бейджи: ${badges2.length}`);
+		console.log(`📊 Donor 2 badges: ${badges2.length}`);
 
-		// Проверяем, есть ли бейдж "Мастер плазмы"
+		// Checking if the plasma master badge is present
 		let hasPlasmaMaster = false;
 		for (const tokenId of badges2) {
 			const tokenURI = await donorBadges.tokenURI(tokenId);
 			if (tokenURI.includes('Plasma Master')) {
 				hasPlasmaMaster = true;
-				console.log('✅ Бейдж "Мастер плазмы" получен!');
+				console.log('✅ Plasma master badge received!');
 				break;
 			}
 		}
 
 		if (!hasPlasmaMaster) {
-			console.log('❌ Бейдж "Мастер плазмы" не найден');
+			console.log('❌ Plasma master badge not found');
 		}
 
-		// Финальная статистика
-		console.log('\n📊 Финальная статистика тестирования бейджей');
+		// Final statistics
+		console.log('\n📊 Final statistics of badge testing');
 		console.log('==========================================');
 
 		const donorInfo = await veDonate.getDonorInfo(donor.address);
 		const donor2Info = await veDonate.getDonorInfo(donor2Wallet.address);
 
-		console.log('👤 Donor 1 (кровь):');
-		console.log(`- Всего донаций: ${donorInfo.totalDonations}`);
-		console.log(`- Плазма донаций: ${donorInfo.plasmaDonations}`);
+		console.log('👤 Donor 1 (blood):');
+		console.log(`- Total donations: ${donorInfo.totalDonations}`);
+		console.log(`- Plasma donations: ${donorInfo.plasmaDonations}`);
 		console.log(
-			`- Бейджи: ${(await donorBadges.getDonorBadges(donor.address)).length}`
+			`- Badges: ${(await donorBadges.getDonorBadges(donor.address)).length}`
 		);
 
-		console.log('\n👤 Donor 2 (плазма):');
-		console.log(`- Всего донаций: ${donor2Info.totalDonations}`);
-		console.log(`- Плазма донаций: ${donor2Info.plasmaDonations}`);
+		console.log('\n👤 Donor 2 (plasma):');
+		console.log(`- Total donations: ${donor2Info.totalDonations}`);
+		console.log(`- Plasma donations: ${donor2Info.plasmaDonations}`);
 		console.log(
-			`- Бейджи: ${
+			`- Badges: ${
 				(await donorBadges.getDonorBadges(donor2Wallet.address)).length
 			}`
 		);
 
-		// Тест 7: Проверка дублирования бейджей
-		console.log('\n🔄 Тест 7: Проверка дублирования бейджей');
+		// Test 7: Checking for duplicate badges
+		console.log('\n🔄 Test 7: Checking for duplicate badges');
 		console.log('-------------------------------------');
 
-		// Попытка добавить еще одну донацию
+		// Trying to add another donation
 		const txExtra = await veDonate
 			.connect(deployer)
 			.addDonation(donor.address, 'blood', 450, 'center-extra');
 		await txExtra.wait();
 
 		const finalBadges = await donorBadges.getDonorBadges(donor.address);
-		console.log(
-			`📊 Бейджей после дополнительной донации: ${finalBadges.length}`
-		);
+		console.log(`📊 Badges after additional donation: ${finalBadges.length}`);
 
 		if (finalBadges.length === 5) {
-			console.log('✅ Корректно: Дублирования бейджей нет');
+			console.log('✅ Correctly: Duplicate badges are not present');
 		} else {
-			console.log('❌ Ошибка: Количество бейджей изменилось');
+			console.log('❌ Error: The number of badges has changed');
 		}
 
-		console.log('\n🎉 Все тесты NFT бейджей завершены!');
-		console.log('\n📋 Сводка результатов:');
-		console.log('✅ Бейдж "Первая донация" работает');
-		console.log('✅ Бейдж "Бронзовый донор" работает');
-		console.log('✅ Бейдж "Серебряный донор" работает');
-		console.log('✅ Бейдж "Золотой донор" работает');
-		console.log('✅ Бейдж "Спасатель жизней" работает');
-		console.log('✅ Бейдж "Мастер плазмы" работает');
-		console.log('✅ Дублирование бейджей предотвращено');
-		console.log('✅ Автоматическое начисление работает');
+		console.log('\n🎉 All NFT badges tests completed!');
+		console.log('\n📋 Summary of results:');
+		console.log('✅ Badge "First donation" works');
+		console.log('✅ Badge "Bronze donor" works');
+		console.log('✅ Badge "Silver donor" works');
+		console.log('✅ Badge "Gold donor" works');
+		console.log('✅ Badge "Life saver" works');
+		console.log('✅ Badge "Plasma master" works');
+		console.log('✅ Duplicate badges are prevented');
+		console.log('✅ Automatic awarding works');
 	} catch (error) {
-		console.error('💥 Ошибка в тестах бейджей:', error);
+		console.error('💥 Error in NFT badges tests:', error);
 		throw error;
 	}
 }
@@ -274,6 +272,6 @@ async function badgeTests() {
 badgeTests()
 	.then(() => process.exit(0))
 	.catch((error) => {
-		console.error('💥 Тесты бейджей провалились:', error);
+		console.error('💥 NFT badges tests failed:', error);
 		process.exit(1);
 	});

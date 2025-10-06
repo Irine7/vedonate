@@ -6,25 +6,25 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @title B3TRToken
- * @dev ERC-20 токен для вознаграждения доноров крови
- * Символ: B3TR (Blood Token Reward)
+ * @dev ERC-20 token for rewarding blood donors
+ * Symbol: B3TR (Blood Token Reward)
  */
 contract B3TRToken is ERC20, Ownable {
-    uint256 public constant B3TR_PER_DONATION = 10 * 10**18; // 10 B3TR за донацию
-    uint256 public constant B3TR_PER_PLASMA = 15 * 10**18;   // 15 B3TR за плазму
+    uint256 public constant B3TR_PER_DONATION = 10 * 10**18; // 10 B3TR per donation
+    uint256 public constant B3TR_PER_PLASMA = 15 * 10**18;   // 15 B3TR per plasma
     
-    // События
+    // Events
     event TokensRewarded(address indexed donor, uint256 amount, string donationType);
     
     constructor() ERC20("B3TR Token", "B3TR") Ownable(msg.sender) {
-        // Начальная эмиссия 1,000,000 B3TR токенов
+        // Initial supply of 1,000,000 B3TR tokens
         _mint(msg.sender, 1000000 * 10**18);
     }
     
     /**
-     * @dev Начисление токенов донору
-     * @param donor Адрес донора
-     * @param donationType Тип донации ("blood" или "plasma")
+     * @dev Award tokens to donor
+     * @param donor Donor address
+     * @param donationType Donation type ("blood" or "plasma")
      */
     function rewardDonor(address donor, string memory donationType) external onlyOwner {
         uint256 reward;
@@ -40,7 +40,7 @@ contract B3TRToken is ERC20, Ownable {
     }
     
     /**
-     * @dev Массовое начисление токенов
+     * @dev Batch token awarding
      */
     function batchRewardDonors(
         address[] calldata donors, 
@@ -55,7 +55,7 @@ contract B3TRToken is ERC20, Ownable {
     }
     
     /**
-     * @dev Получить баланс токенов донора
+     * @dev Get donor token balance
      */
     function getDonorBalance(address donor) external view returns (uint256) {
         return balanceOf(donor);

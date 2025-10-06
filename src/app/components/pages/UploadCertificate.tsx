@@ -61,9 +61,8 @@ export function UploadCertificate(): ReactElement {
 	const handleUpload = async () => {
 		if (!selectedFile || !account) {
 			toast({
-				title: 'Ошибка',
-				description:
-					'Пожалуйста, выберите файл и убедитесь, что кошелек подключен',
+				title: 'Error',
+				description: 'Please select a file and make sure wallet is connected',
 				status: 'error',
 				duration: 3000,
 				isClosable: true,
@@ -75,7 +74,7 @@ export function UploadCertificate(): ReactElement {
 			isUploading: true,
 			progress: 0,
 			status: 'uploading',
-			message: 'Загружаем файл...',
+			message: 'Uploading file...',
 		});
 
 		try {
@@ -92,7 +91,7 @@ export function UploadCertificate(): ReactElement {
 				isUploading: false,
 				progress: 100,
 				status: 'processing',
-				message: 'AI анализирует документ...',
+				message: 'AI analyzing document...',
 			});
 
 			// Симуляция AI обработки
@@ -103,7 +102,7 @@ export function UploadCertificate(): ReactElement {
 				isUploading: false,
 				progress: 100,
 				status: 'processing',
-				message: 'Записываем в блокчейн...',
+				message: 'Writing to blockchain...',
 			});
 
 			await addDonation(account, donationType, parseInt(amount), centerId);
@@ -113,14 +112,15 @@ export function UploadCertificate(): ReactElement {
 				isUploading: false,
 				progress: 100,
 				status: 'success',
-				message: `Донация подтверждена! Получено ${
+				message: `Donation confirmed! Received ${
 					donationType === 'blood' ? '10' : '15'
-				} B3TR токенов`,
+				} B3TR tokens`,
 			});
 
 			toast({
-				title: 'Успешно!',
-				description: 'Донация записана в блокчейн. Получены токены и NFT.',
+				title: 'Success!',
+				description:
+					'Donation recorded in blockchain. Tokens and NFT received.',
 				status: 'success',
 				duration: 5000,
 				isClosable: true,
@@ -130,12 +130,12 @@ export function UploadCertificate(): ReactElement {
 				isUploading: false,
 				progress: 0,
 				status: 'error',
-				message: 'Ошибка при обработке документа или записи в блокчейн',
+				message: 'Error processing document or writing to blockchain',
 			});
 
 			toast({
-				title: 'Ошибка',
-				description: 'Не удалось обработать документ или записать в блокчейн',
+				title: 'Error',
+				description: 'Failed to process document or write to blockchain',
 				status: 'error',
 				duration: 3000,
 				isClosable: true,
@@ -149,9 +149,9 @@ export function UploadCertificate(): ReactElement {
 				<Alert status="success">
 					<AlertIcon />
 					<Box>
-						<AlertTitle>Донация подтверждена!</AlertTitle>
+						<AlertTitle>Donation confirmed!</AlertTitle>
 						<AlertDescription>
-							Данные записаны в блокчейн VeChain. Токены и NFT начислены.
+							Data recorded in VeChain blockchain. Tokens and NFT awarded.
 						</AlertDescription>
 					</Box>
 				</Alert>
@@ -163,10 +163,10 @@ export function UploadCertificate(): ReactElement {
 				<Alert status="error">
 					<AlertIcon />
 					<Box>
-						<AlertTitle>Ошибка верификации</AlertTitle>
+						<AlertTitle>Verification Error</AlertTitle>
 						<AlertDescription>
-							Не удалось подтвердить донацию. Проверьте качество фото и
-							подключение к блокчейну.
+							Failed to verify donation. Check photo quality and blockchain
+							connection.
 						</AlertDescription>
 					</Box>
 				</Alert>
@@ -181,7 +181,7 @@ export function UploadCertificate(): ReactElement {
 			{getStatusAlert()}
 
 			<FormControl>
-				<FormLabel>Тип донации</FormLabel>
+				<FormLabel>Donation Type</FormLabel>
 				<Select
 					value={donationType}
 					onChange={(e) =>
@@ -189,13 +189,13 @@ export function UploadCertificate(): ReactElement {
 					}
 					disabled={uploadState.isUploading}
 				>
-					<option value="blood">Кровь (450 мл) - 10 B3TR</option>
-					<option value="plasma">Плазма (600 мл) - 15 B3TR</option>
+					<option value="blood">Blood (450 ml) - 10 B3TR</option>
+					<option value="plasma">Plasma (600 ml) - 15 B3TR</option>
 				</Select>
 			</FormControl>
 
 			<FormControl>
-				<FormLabel>Количество (мл)</FormLabel>
+				<FormLabel>Amount (ml)</FormLabel>
 				<Input
 					type="number"
 					value={amount}
@@ -206,21 +206,21 @@ export function UploadCertificate(): ReactElement {
 			</FormControl>
 
 			<FormControl>
-				<FormLabel>ID центра сдачи</FormLabel>
+				<FormLabel>Donation Center ID</FormLabel>
 				<Select
 					value={centerId}
 					onChange={(e) => setCenterId(e.target.value)}
 					disabled={uploadState.isUploading}
 				>
-					<option value="center-001">Центр крови №1</option>
-					<option value="center-002">Медцентр "Здоровье"</option>
-					<option value="center-003">Больница №5</option>
+					<option value="center-001">Blood Center #1</option>
+					<option value="center-002">Health Medical Center</option>
+					<option value="center-003">Hospital #5</option>
 				</Select>
 			</FormControl>
 
 			<Box>
 				<Text mb={2} fontWeight="medium">
-					Выберите фото справки о донации:
+					Select donation certificate photo:
 				</Text>
 				<Input
 					type="file"
@@ -231,7 +231,7 @@ export function UploadCertificate(): ReactElement {
 				/>
 				{selectedFile && (
 					<Text fontSize="sm" color="gray.600">
-						Выбран файл: {selectedFile.name}
+						Selected file: {selectedFile.name}
 					</Text>
 				)}
 			</Box>
@@ -252,17 +252,18 @@ export function UploadCertificate(): ReactElement {
 				colorScheme="red"
 				onClick={handleUpload}
 				disabled={!selectedFile || uploadState.isUploading || !account}
-				loadingText="Обработка..."
+				loadingText="Processing..."
 				isLoading={uploadState.isUploading}
 			>
 				<Icon mr={2}>
 					<Text>📸</Text>
 				</Icon>
-				Загрузить и записать в блокчейн
+				Upload and record in blockchain
 			</Button>
 
 			<Text fontSize="xs" color="gray.500" textAlign="center">
-				AI проверит документ, затем данные будут записаны в VeChain блокчейн
+				AI will verify the document, then data will be recorded in VeChain
+				blockchain
 			</Text>
 		</VStack>
 	);

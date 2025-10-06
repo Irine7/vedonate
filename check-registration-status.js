@@ -2,20 +2,20 @@ const { ThorClient, SimpleWallet } = require('@vechain/sdk-core');
 const { WebSocketConnector } = require('@vechain/sdk-network');
 
 async function checkRegistrationStatus() {
-	console.log('🔍 Проверяем статус регистрации пользователя...');
-	console.log('📍 Адрес пользователя:', USER_ADDRESS);
-	console.log('📄 Адрес контракта:', CONTRACT_ADDRESS);
+	console.log('🔍 Checking the registration status of the user...');
+	console.log('📍 User address:', USER_ADDRESS);
+	console.log('📄 Contract address:', CONTRACT_ADDRESS);
 	console.log('');
 
 	try {
-		// Подключаемся к VeChain Testnet
+		// Connect to VeChain Testnet
 		const thorClient = new ThorClient(
 			new WebSocketConnector('wss://testnet.vechain.org')
 		);
 
-		console.log('✅ Подключение к VeChain Testnet установлено');
+		console.log('✅ Connection to VeChain Testnet established');
 
-		// ABI для функции isDonorRegistered
+		// ABI for the isDonorRegistered function
 		const isDonorRegisteredABI = [
 			{
 				inputs: [{ internalType: 'address', name: 'donor', type: 'address' }],
@@ -26,28 +26,28 @@ async function checkRegistrationStatus() {
 			},
 		];
 
-		// Создаем экземпляр контракта
+		// Create an instance of the contract
 		const contract = thorClient.contract(
 			CONTRACT_ADDRESS,
 			isDonorRegisteredABI
 		);
 
-		console.log('📞 Вызываем функцию isDonorRegistered...');
+		console.log('📞 Calling the isDonorRegistered function...');
 
-		// Вызываем функцию isDonorRegistered
+		// Call the isDonorRegistered function
 		const result = await contract.read('isDonorRegistered', [USER_ADDRESS]);
 
-		console.log('📊 Результат проверки:');
-		console.log('   Пользователь зарегистрирован:', result);
+		console.log('📊 Result of the check:');
+		console.log('   User registered:', result);
 
 		if (result) {
-			console.log('✅ ПОЛЬЗОВАТЕЛЬ УЖЕ ЗАРЕГИСТРИРОВАН!');
+			console.log('✅ USER ALREADY REGISTERED!');
 		} else {
-			console.log('❌ Пользователь НЕ зарегистрирован');
+			console.log('❌ USER NOT REGISTERED');
 		}
 
-		// Также проверим последние транзакции
-		console.log('\n🔍 Проверяем последние транзакции...');
+		// Also check the last transactions
+		console.log('\n🔍 Checking the last transactions...');
 
 		try {
 			const response = await fetch(
@@ -55,24 +55,24 @@ async function checkRegistrationStatus() {
 			);
 			const data = await response.json();
 
-			console.log(`📈 Всего транзакций: ${data.count}`);
+			console.log(`📈 Total transactions: ${data.count}`);
 
-			// Ищем транзакции к нашему контракту
+			// Find transactions to our contract
 			const contractTxs =
 				data.items?.filter((tx) =>
 					tx.clauses?.some((clause) => clause.to === CONTRACT_ADDRESS)
 				) || [];
 
-			console.log(`📋 Транзакций к контракту: ${contractTxs.length}`);
+			console.log(`📋 Transactions to the contract: ${contractTxs.length}`);
 
 			if (contractTxs.length > 0) {
-				console.log('\n📝 Последние транзакции к контракту:');
+				console.log('\n📝 Last transactions to the contract:');
 				contractTxs.slice(0, 3).forEach((tx, index) => {
 					console.log(`   ${index + 1}. ID: ${tx.txID}`);
-					console.log(`      Статус: ${tx.txStatus}`);
-					console.log(`      Блок: ${tx.blockNumber || 'pending'}`);
+					console.log(`      Status: ${tx.txStatus}`);
+					console.log(`      Block: ${tx.blockNumber || 'pending'}`);
 					console.log(
-						`      Время: ${
+						`      Time: ${
 							tx.timestamp
 								? new Date(tx.timestamp * 1000).toLocaleString()
 								: 'pending'
@@ -81,22 +81,22 @@ async function checkRegistrationStatus() {
 					console.log('');
 				});
 			} else {
-				console.log('❌ Транзакций к контракту не найдено');
+				console.log('❌ Transactions to the contract not found');
 			}
 		} catch (fetchError) {
 			console.warn(
-				'⚠️ Не удалось получить транзакции через API:',
+				'⚠️ Unable to get transactions through the API:',
 				fetchError.message
 			);
 		}
 	} catch (error) {
-		console.error('❌ Ошибка при проверке регистрации:', error);
+		console.error('❌ Error checking registration:', error);
 	}
 }
 
-// Константы
+// Constants
 const USER_ADDRESS = '0xb302484fc7cbecad3983E6C33efE28C3286972f6';
 const CONTRACT_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 
-// Запускаем проверку
+// Run the check
 checkRegistrationStatus().catch(console.error);

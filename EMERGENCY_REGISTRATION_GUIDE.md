@@ -1,76 +1,76 @@
-# 🚨 Экстренная регистрация пользователя
+# 🚨 Emergency User Registration
 
-## Проблема
+## Problem
 
-VeChain Kit не инициализируется правильно (`vechainKit: false`), что приводит к ошибкам:
+VeChain Kit is not initializing properly (`vechainKit: false`), which leads to errors:
 
 - `feeDelegation: undefined`
 - `thor: false`
 - `Failed to estimate gas`
 
-## 🔧 Решения
+## 🔧 Solutions
 
-### 1. Прямая регистрация через VeWorld Wallet
+### 1. Direct Registration via VeWorld Wallet
 
-1. **Откройте VeWorld Wallet**
-2. **Перейдите в раздел "DApps" или "Контракты"**
-3. **Добавьте контракт**: `0x3e445638b907d942c33b904d6ea6951ac533bc34`
-4. **Найдите функцию `registerDonor()`**
-5. **Вызовите функцию** без параметров
-6. **Подтвердите транзакцию**
+1. **Open VeWorld Wallet**
+2. **Go to "DApps" or "Contracts" section**
+3. **Add contract**: `0x3e445638b907d942c33b904d6ea6951ac533bc34`
+4. **Find function `registerDonor()`**
+5. **Call function** without parameters
+6. **Confirm transaction**
 
-### 2. Использование VeChain Explorer
+### 2. Using VeChain Explorer
 
-1. **Откройте**: https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
-2. **Перейдите на вкладку "Contract"**
-3. **Найдите функцию `registerDonor()`**
-4. **Подключите кошелек** через VeWorld
-5. **Вызовите функцию**
+1. **Open**: https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
+2. **Go to "Contract" tab**
+3. **Find function `registerDonor()`**
+4. **Connect wallet** via VeWorld
+5. **Call function**
 
-### 3. Исправление VeChain Kit
+### 3. Fixing VeChain Kit
 
-#### Проблема: VeChain Kit не инициализируется
+#### Problem: VeChain Kit is not initializing
 
-**Возможные причины:**
+**Possible causes:**
 
-- Конфликт версий
-- Проблемы с динамическим импортом
-- Ошибки в конфигурации
+- Version conflicts
+- Issues with dynamic import
+- Configuration errors
 
-**Решение 1: Перезагрузка страницы**
+**Solution 1: Page reload**
 
 ```javascript
-// В консоли браузера
+// In browser console
 window.location.reload();
 ```
 
-**Решение 2: Принудительная инициализация**
+**Solution 2: Force initialization**
 
 ```javascript
-// В консоли браузера
+// In browser console
 if (window.vechainKit) {
-	console.log('VeChain Kit найден:', window.vechainKit);
+	console.log('VeChain Kit found:', window.vechainKit);
 } else {
-	console.log('VeChain Kit не найден, попробуйте перезагрузить страницу');
+	console.log('VeChain Kit not found, try reloading the page');
 }
 ```
 
-**Решение 3: Проверка конфигурации**
-Убедитесь, что в `.env.local` есть:
+**Solution 3: Configuration check**
+Make sure `.env.local` contains:
 
 ```
 NEXT_PUBLIC_DELEGATOR_URL=https://sponsor-testnet.vechain.energy/by/90
 NEXT_PUBLIC_NETWORK_TYPE=test
 ```
 
-### 4. Альтернативный метод - через код
+### 4. Alternative Method - via Code
 
-Добавьте в компонент кнопку для прямого вызова:
+Add a button to the component for direct call:
 
 ```typescript
 const handleDirectRegistration = async () => {
 	try {
-		// Прямой вызов через window.vechain
+		// Direct call via window.vechain
 		if (window.vechain) {
 			const result = await window.vechain.sendTransaction({
 				clauses: [
@@ -81,54 +81,54 @@ const handleDirectRegistration = async () => {
 					},
 				],
 			});
-			console.log('Результат:', result);
+			console.log('Result:', result);
 		}
 	} catch (error) {
-		console.error('Ошибка:', error);
+		console.error('Error:', error);
 	}
 };
 ```
 
-## 🎯 Рекомендации
+## 🎯 Recommendations
 
-### Немедленные действия:
+### Immediate actions:
 
-1. **Попробуйте регистрацию снова** - код теперь имеет 3 уровня fallback
-2. **Если не работает** - используйте прямой метод через VeWorld
-3. **Проверьте логи** - теперь будет больше диагностической информации
+1. **Try registration again** - code now has 3 levels of fallback
+2. **If it does not work** - use direct method via VeWorld
+3. **Check logs** - now there will be more diagnostic information
 
-### Долгосрочные решения:
+### Long-term solutions:
 
-1. **Обновите VeChain Kit** до последней версии
-2. **Проверьте совместимость** с Next.js 15
-3. **Рассмотрите альтернативные библиотеки** для работы с VeChain
+1. **Update VeChain Kit** to latest version
+2. **Check compatibility** with Next.js 15
+3. **Consider alternative libraries** for working with VeChain
 
-## 📊 Диагностика
+## 📊 Diagnostics
 
-После попытки регистрации проверьте в консоли:
+After attempting registration, check in console:
 
 ```javascript
-// Проверка состояния
+// Check state
 console.log('VeChain Kit:', window.vechainKit);
 console.log('Connection:', window.vechain?.connection);
 console.log('Network:', window.vechain?.network);
 ```
 
-**Ожидаемые значения:**
+**Expected values:**
 
-- `VeChain Kit`: объект (не undefined)
-- `Connection`: объект с isConnected: true
-- `Network`: объект с type: 'test'
+- `VeChain Kit`: object (not undefined)
+- `Connection`: object with isConnected: true
+- `Network`: object with type: 'test'
 
-## 🆘 Если ничего не помогает
+## 🆘 If nothing helps
 
-1. **Перезапустите приложение**: `pnpm run dev`
-2. **Очистите кэш браузера**
-3. **Попробуйте в режиме инкогнито**
-4. **Проверьте консоль на ошибки JavaScript**
+1. **Restart application**: `pnpm run dev`
+2. **Clear browser cache**
+3. **Try in incognito mode**
+4. **Check console for JavaScript errors**
 
-## 📞 Контакты для поддержки
+## 📞 Support Contacts
 
 - **VeChain Discord**: https://discord.gg/vechain
 - **VeChain GitHub**: https://github.com/vechain
-- **Документация**: https://docs.vechain.org/
+- **Documentation**: https://docs.vechain.org/

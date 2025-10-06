@@ -58,7 +58,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 		isDeployer,
 	} = useVeDonate();
 
-	// Получаем профиль пользователя из localStorage
+	// Get user profile from localStorage
 	const getUserProfile = () => {
 		try {
 			const profileData = localStorage.getItem(`userProfile_${account}`);
@@ -87,8 +87,8 @@ export function DonorStats({ account }: DonorStatsProps) {
 	const handleAddDonation = async () => {
 		if (!donationForm.centerId.trim()) {
 			toast({
-				title: 'Ошибка',
-				description: 'Пожалуйста, укажите ID центра донорства',
+				title: 'Error',
+				description: 'Please specify the donation center ID',
 				status: 'error',
 				duration: 3000,
 				isClosable: true,
@@ -106,8 +106,8 @@ export function DonorStats({ account }: DonorStatsProps) {
 					donationForm.centerId
 				);
 				toast({
-					title: 'Успешно!',
-					description: 'Донация добавлена!',
+					title: 'Success!',
+					description: 'Donation added!',
 					status: 'success',
 					duration: 5000,
 					isClosable: true,
@@ -115,9 +115,9 @@ export function DonorStats({ account }: DonorStatsProps) {
 				});
 			} else {
 				toast({
-					title: 'Донация отправлена на верификацию',
+					title: 'Donation sent for verification',
 					description:
-						'Ваша донация будет проверена и добавлена администратором.',
+						'Your donation will be verified and added by an administrator.',
 					status: 'info',
 					duration: 5000,
 					isClosable: true,
@@ -126,7 +126,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 			}
 
 			onClose();
-			// Сброс формы
+			// Reset form
 			setDonationForm({
 				donationType: 'blood',
 				amount: 450,
@@ -134,8 +134,8 @@ export function DonorStats({ account }: DonorStatsProps) {
 			});
 		} catch (err) {
 			toast({
-				title: 'Ошибка',
-				description: err instanceof Error ? err.message : 'Неизвестная ошибка',
+				title: 'Error',
+				description: err instanceof Error ? err.message : 'Unknown error',
 				status: 'error',
 				duration: 5000,
 				isClosable: true,
@@ -149,7 +149,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 			<Card bg={cardBg} shadow="lg">
 				<CardBody p={6}>
 					<Text color={subtextColor} textAlign="center">
-						Загрузка статистики...
+						Loading statistics...
 					</Text>
 				</CardBody>
 			</Card>
@@ -189,10 +189,10 @@ export function DonorStats({ account }: DonorStatsProps) {
 		<VStack spacing={6} align="stretch">
 			{/* Заголовок */}
 			<Heading size="lg" color={textColor} textAlign="center">
-				📊 Статистика донорства
+				📊 Donation Statistics
 				{userProfile && (
 					<Text fontSize="md" color={subtextColor} fontWeight="normal" mt={2}>
-						Добро пожаловать, {userProfile.firstName} {userProfile.lastName}!
+						Welcome, {userProfile.firstName} {userProfile.lastName}!
 					</Text>
 				)}
 			</Heading>
@@ -209,7 +209,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								{totalDonations}
 							</Text>
 							<Text fontSize="sm" color={subtextColor} textAlign="center">
-								Всего донаций
+								Total Donations
 							</Text>
 						</VStack>
 					</CardBody>
@@ -230,7 +230,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								{b3trBalance?.toString() || '0'}
 							</Text>
 							<Text fontSize="sm" color={subtextColor} textAlign="center">
-								B3TR токенов
+								B3TR Tokens
 							</Text>
 						</VStack>
 					</CardBody>
@@ -251,7 +251,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								{currentLevel}
 							</Text>
 							<Text fontSize="sm" color={subtextColor} textAlign="center">
-								Текущий уровень
+								Current Level
 							</Text>
 						</VStack>
 					</CardBody>
@@ -267,7 +267,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								{donorBadges?.length || 0}
 							</Text>
 							<Text fontSize="sm" color={subtextColor} textAlign="center">
-								NFT бейджей
+								NFT Badges
 							</Text>
 						</VStack>
 					</CardBody>
@@ -279,15 +279,15 @@ export function DonorStats({ account }: DonorStatsProps) {
 				<CardBody p={6}>
 					<VStack spacing={4}>
 						<Heading size="md" color={textColor}>
-							🎯 Прогресс до следующего уровня
+							🎯 Progress to Next Level
 						</Heading>
 						<VStack spacing={2} w="full">
 							<HStack justify="space-between" w="full">
 								<Text color={subtextColor}>
-									Уровень {currentLevel} → {nextLevel}
+									Level {currentLevel} → {nextLevel}
 								</Text>
 								<Badge colorScheme="purple" variant="subtle">
-									{donationsNeeded} донаций до уровня
+									{donationsNeeded} donations to level
 								</Badge>
 							</HStack>
 							<Progress
@@ -298,7 +298,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								w="full"
 							/>
 							<Text fontSize="sm" color={subtextColor}>
-								{totalDonations % 5} из 5 донаций
+								{totalDonations % 5} of 5 donations
 							</Text>
 						</VStack>
 					</VStack>
@@ -311,7 +311,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 					<CardBody p={6}>
 						<VStack spacing={4}>
 							<Heading size="md" color={textColor}>
-								🏆 Ваши NFT бейджи
+								🏆 Your NFT Badges
 							</Heading>
 							<Grid
 								templateColumns={{
@@ -345,7 +345,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 														variant="subtle"
 														fontSize="xs"
 													>
-														Уровень {badge.toString()}
+														Level {badge.toString()}
 													</Badge>
 												</VStack>
 											</CardBody>
@@ -364,7 +364,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 					<CardBody p={6}>
 						<VStack spacing={4}>
 							<Heading size="md" color={textColor}>
-								📋 История донаций
+								📋 Donation History
 							</Heading>
 							<VStack spacing={3} w="full">
 								{donorDonations.slice(0, 10).map((donation, index) => (
@@ -394,7 +394,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 													+{donation.amount} B3TR
 												</Badge>
 												<Text fontSize="xs" color={subtextColor}>
-													Центр #{donation.centerId}
+													Center #{donation.centerId}
 												</Text>
 											</VStack>
 										</HStack>
@@ -406,7 +406,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 							</VStack>
 							{donorDonations.length > 10 && (
 								<Text fontSize="sm" color={subtextColor} textAlign="center">
-									И еще {donorDonations.length - 10} донаций...
+									And {donorDonations.length - 10} more donations...
 								</Text>
 							)}
 						</VStack>
@@ -426,14 +426,14 @@ export function DonorStats({ account }: DonorStatsProps) {
 								<Text fontWeight="bold" color={textColor}>
 									{userProfile
 										? `${userProfile.firstName} ${userProfile.lastName}`
-										: 'Донор зарегистрирован'}
+										: 'Donor Registered'}
 								</Text>
 								<Text fontSize="sm" color={subtextColor}>
 									{userProfile
-										? `Зарегистрирован ${new Date(
+										? `Registered ${new Date(
 												userProfile.registeredAt
-										  ).toLocaleDateString('ru-RU')}`
-										: 'Вы успешно зарегистрированы в системе VeDonate'}
+										  ).toLocaleDateString('en-US')}`
+										: 'You are successfully registered in the VeDonate system'}
 								</Text>
 								{userProfile?.email && (
 									<Text fontSize="xs" color={subtextColor}>
@@ -447,7 +447,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								)}
 							</VStack>
 							<Badge colorScheme="green" variant="subtle" px={3} py={1}>
-								Активен
+								Active
 							</Badge>
 						</HStack>
 						<Button
@@ -458,7 +458,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 							leftIcon={<Icon>🩸</Icon>}
 							w="full"
 						>
-							Добавить донацию
+							Add Donation
 						</Button>
 					</VStack>
 				</CardBody>
@@ -468,12 +468,12 @@ export function DonorStats({ account }: DonorStatsProps) {
 			<Modal isOpen={isOpen} onClose={onClose} size="lg">
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>🩸 Добавить донацию</ModalHeader>
+					<ModalHeader>🩸 Add Donation</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody pb={6}>
 						<VStack spacing={4}>
 							<FormControl>
-								<FormLabel>Тип донации</FormLabel>
+								<FormLabel>Donation Type</FormLabel>
 								<Select
 									value={donationForm.donationType}
 									onChange={(e) =>
@@ -483,15 +483,15 @@ export function DonorStats({ account }: DonorStatsProps) {
 										})
 									}
 								>
-									<option value="blood">Кровь</option>
-									<option value="plasma">Плазма</option>
-									<option value="platelets">Тромбоциты</option>
-									<option value="bone_marrow">Костный мозг</option>
+									<option value="blood">Blood</option>
+									<option value="plasma">Plasma</option>
+									<option value="platelets">Platelets</option>
+									<option value="bone_marrow">Bone Marrow</option>
 								</Select>
 							</FormControl>
 
 							<FormControl>
-								<FormLabel>Объем (мл)</FormLabel>
+								<FormLabel>Volume (ml)</FormLabel>
 								<NumberInput
 									value={donationForm.amount}
 									onChange={(_, value) =>
@@ -508,7 +508,7 @@ export function DonorStats({ account }: DonorStatsProps) {
 								</NumberInput>
 							</FormControl>
 
-							<FormControl>
+							{/* <FormControl>
 								<FormLabel>ID центра донорства</FormLabel>
 								<Input
 									value={donationForm.centerId}
@@ -518,22 +518,22 @@ export function DonorStats({ account }: DonorStatsProps) {
 											centerId: e.target.value,
 										})
 									}
-									placeholder="Введите ID центра"
+																				placeholder="Enter center ID"
 								/>
-							</FormControl>
+							</FormControl> */}
 
 							<HStack spacing={4} w="full">
 								<Button variant="ghost" onClick={onClose} flex={1}>
-									Отмена
+									Cancel
 								</Button>
 								<Button
 									colorScheme="orange"
 									onClick={handleAddDonation}
 									isLoading={isLoading}
-									loadingText="Добавление..."
+									loadingText="Adding..."
 									flex={1}
 								>
-									{isDeployer ? 'Добавить донацию' : 'Отправить на верификацию'}
+									{isDeployer ? 'Add Donation' : 'Send for Verification'}
 								</Button>
 							</HStack>
 						</VStack>

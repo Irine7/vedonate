@@ -1,16 +1,16 @@
 const { ethers } = require('hardhat');
 
 /**
- * 🏆 Простой тест системы NFT бейджей
- * Проверяет только логику начисления бейджей
+ * 🏆 Simple test system NFT badges
+ * Checks only the logic of awarding badges
  */
 
 async function simpleBadgeTests() {
-	console.log('🏆 Запуск простых тестов NFT бейджей...\n');
+	console.log('🏆 Running simple tests NFT badges...\n');
 
 	const [deployer] = await ethers.getSigners();
 
-	// ✅ Адреса деплоенных контрактов VeChain Testnet
+	// ✅ Deployed contracts addresses VeChain Testnet
 	const VEDONATE_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 	const B3TR_ADDRESS = '0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3';
 	const BADGES_ADDRESS = '0x9575e91189e60b4e9a41f136c87d177e42296a88';
@@ -23,17 +23,17 @@ async function simpleBadgeTests() {
 			BADGES_ADDRESS
 		);
 
-		// Функция для проверки бейджей
+		// Function to check badges
 		const checkBadges = async (donorAddress, expectedCount, milestone) => {
 			const badges = await donorBadges.getDonorBadges(donorAddress);
-			console.log(`📊 После ${milestone}: ${badges.length} бейджей`);
+			console.log(`📊 After ${milestone}: ${badges.length} badges`);
 
 			// Проверяем каждый бейдж
 			for (let i = 0; i < badges.length; i++) {
 				const tokenId = badges[i];
 				const tokenURI = await donorBadges.tokenURI(tokenId);
 				console.log(
-					`   🏆 Бейдж ${i + 1}: ID ${tokenId} - ${tokenURI.substring(
+					`   🏆 Badge ${i + 1}: ID ${tokenId} - ${tokenURI.substring(
 						0,
 						50
 					)}...`
@@ -41,27 +41,27 @@ async function simpleBadgeTests() {
 			}
 
 			if (badges.length === expectedCount) {
-				console.log(`✅ Корректно: ${expectedCount} бейджей получено`);
+				console.log(`✅ Correctly: ${expectedCount} badges received`);
 			} else {
 				console.log(
-					`❌ Ошибка: ожидалось ${expectedCount}, получено ${badges.length}`
+					`❌ Error: expected ${expectedCount}, received ${badges.length}`
 				);
 			}
 			console.log('');
 		};
 
-		// Проверяем существующих доноров
-		console.log('🔍 Проверка существующих доноров');
+		// Checking existing donors
+		console.log('🔍 Checking existing donors');
 		console.log('================================');
 
-		// Получаем информацию о первом доноре (который уже имеет много донаций)
+		// Getting information about the first donor (who already has many donations)
 		const donor1Address = '0x2406180BCa83983d40191Febc6d939C62152B71b';
 		const donor1Info = await veDonate.getDonorInfo(donor1Address);
 
-		console.log('👤 Донор 1:');
-		console.log(`- Всего донаций: ${donor1Info.totalDonations}`);
-		console.log(`- Плазма донаций: ${donor1Info.plasmaDonations}`);
-		console.log(`- Зарегистрирован: ${donor1Info.isRegistered}`);
+		console.log('👤 Donor 1:');
+		console.log(`- Total donations: ${donor1Info.totalDonations}`);
+		console.log(`- Plasma donations: ${donor1Info.plasmaDonations}`);
+		console.log(`- Registered: ${donor1Info.isRegistered}`);
 
 		await checkBadges(
 			donor1Address,
@@ -74,17 +74,17 @@ async function simpleBadgeTests() {
 				: donor1Info.totalDonations >= 5
 				? 2
 				: 1,
-			'проверки существующего донора'
+			'checking existing donor'
 		);
 
-		// Проверяем второго донора (если есть)
+		// Checking the second donor (if there is one)
 		const donor2Address = '0xB381e7da548601B1CCB05C66d415b20baE40d828';
 		const donor2Info = await veDonate.getDonorInfo(donor2Address);
 
 		if (donor2Info.isRegistered) {
-			console.log('👤 Донор 2:');
-			console.log(`- Всего донаций: ${donor2Info.totalDonations}`);
-			console.log(`- Плазма донаций: ${donor2Info.plasmaDonations}`);
+			console.log('👤 Donor 2:');
+			console.log(`- Total donations: ${donor2Info.totalDonations}`);
+			console.log(`- Plasma donations: ${donor2Info.plasmaDonations}`);
 
 			await checkBadges(
 				donor2Address,
@@ -97,43 +97,45 @@ async function simpleBadgeTests() {
 					: donor2Info.totalDonations >= 5
 					? 2
 					: 1,
-				'проверки второго донора'
+				'checking the second donor'
 			);
 		}
 
-		// Проверяем общую статистику
-		console.log('📊 Общая статистика системы');
+		// Checking the total statistics
+		console.log('📊 Total statistics of the system');
 		console.log('=========================');
 
 		const globalStats = await veDonate.getGlobalStats();
-		console.log(`- Всего донаций в системе: ${globalStats._totalDonations}`);
-		console.log(`- Всего доноров: ${globalStats._totalDonors}`);
 		console.log(
-			`- Всего B3TR распределено: ${ethers.formatEther(
+			`- Total donations in the system: ${globalStats._totalDonations}`
+		);
+		console.log(`- Total donors: ${globalStats._totalDonors}`);
+		console.log(
+			`- Total B3TR distributed: ${ethers.formatEther(
 				globalStats._totalB3TRDistributed
 			)} B3TR`
 		);
 
-		// Проверяем балансы B3TR
-		console.log('\n💰 Балансы B3TR токенов');
+		// Checking the B3TR balances
+		console.log('\n💰 B3TR token balances');
 		console.log('=======================');
 
 		const donor1Balance = await b3trToken.balanceOf(donor1Address);
-		console.log(`- Донор 1: ${ethers.formatEther(donor1Balance)} B3TR`);
+		console.log(`- Donor 1: ${ethers.formatEther(donor1Balance)} B3TR`);
 
 		if (donor2Info.isRegistered) {
 			const donor2Balance = await b3trToken.balanceOf(donor2Address);
-			console.log(`- Донор 2: ${ethers.formatEther(donor2Balance)} B3TR`);
+			console.log(`- Donor 2: ${ethers.formatEther(donor2Balance)} B3TR`);
 		}
 
-		console.log('\n🎉 Простые тесты завершены!');
-		console.log('\n📋 Сводка результатов:');
-		console.log('✅ Система бейджей работает корректно');
-		console.log('✅ Автоматическое начисление работает');
-		console.log('✅ B3TR токены начисляются правильно');
-		console.log('✅ Статистика обновляется корректно');
+		console.log('\n🎉 Simple tests completed!');
+		console.log('\n📋 Summary of results:');
+		console.log('✅ Badges system works correctly');
+		console.log('✅ Automatic awarding works');
+		console.log('✅ B3TR tokens are awarded correctly');
+		console.log('✅ Statistics are updated correctly');
 	} catch (error) {
-		console.error('💥 Ошибка в простых тестах:', error);
+		console.error('💥 Error in simple tests:', error);
 		throw error;
 	}
 }
@@ -141,6 +143,6 @@ async function simpleBadgeTests() {
 simpleBadgeTests()
 	.then(() => process.exit(0))
 	.catch((error) => {
-		console.error('💥 Простые тесты провалились:', error);
+		console.error('💥 Simple tests failed:', error);
 		process.exit(1);
 	});

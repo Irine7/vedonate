@@ -1,115 +1,115 @@
-# 🔍 Финальная проверка статуса регистрации
+# 🔍 Final Registration Status Check
 
-## 🚨 Проблема
+## 🚨 Problem
 
-- Транзакция отправлена успешно (`Transaction sent successfully via fallback with custom gas`)
-- Но приложение не показывает, что пользователь зарегистрирован
-- API Explorer не возвращает детали транзакций
+- Transaction sent successfully (`Transaction sent successfully via fallback with custom gas`)
+- But application does not show that user is registered
+- API Explorer does not return transaction details
 
-## 🔧 Решение: Ручная проверка
+## 🔧 Solution: Manual Check
 
-### 1. Проверка через VeChain Explorer
+### 1. Check via VeChain Explorer
 
-**Откройте в браузере:**
+**Open in browser:**
 
 ```
 https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
 ```
 
-**Что искать:**
+**What to look for:**
 
-1. **Вкладка "Transactions"** - все транзакции к контракту
-2. **Ищите транзакции от адреса:** `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
-3. **Ищите данные транзакции:** `0x5b34c965` (это вызов `registerDonor()`)
+1. **"Transactions" tab** - all transactions to contract
+2. **Look for transactions from address:** `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
+3. **Look for transaction data:** `0x5b34c965` (this is `registerDonor()` call)
 
-### 2. Проверка статуса транзакции
+### 2. Check Transaction Status
 
-**Если найдете транзакцию:**
+**If you find the transaction:**
 
-- **Статус "Success"** = Регистрация прошла успешно ✅
-- **Статус "Failed"** = Регистрация не удалась ❌
-- **Статус "Pending"** = Транзакция в обработке ⏳
+- **Status "Success"** = Registration successful ✅
+- **Status "Failed"** = Registration failed ❌
+- **Status "Pending"** = Transaction processing ⏳
 
-### 3. Проверка через консоль браузера
+### 3. Check via Browser Console
 
-Выполните в консоли браузера на странице приложения:
+Execute in browser console on application page:
 
 ```javascript
-// Проверяем, что показывает приложение
-console.log('Текущий статус пользователя:', {
+// Check what application shows
+console.log('Current user status:', {
 	isRegistered: window.localStorage.getItem('userRegistered'),
 	donorInfo: JSON.parse(window.localStorage.getItem('donorInfo') || '{}'),
 });
 
-// Проверяем VeChain Kit статус
-console.log('VeChain Kit статус:', {
+// Check VeChain Kit status
+console.log('VeChain Kit status:', {
 	connection: window.vechainKit?.connection?.isConnected,
 	account: window.vechainKit?.connection?.account?.address,
 	network: window.vechainKit?.connection?.network?.type,
 });
 ```
 
-### 4. Принудительное обновление данных
+### 4. Force Data Update
 
-Если транзакция успешна, но приложение не обновилось:
+If transaction is successful but application has not updated:
 
 ```javascript
-// Принудительно обновляем данные
+// Force update data
 if (window.vechainKit?.connection) {
-	// Обновляем статус пользователя
+	// Update user status
 	window.localStorage.setItem('userRegistered', 'true');
 
-	// Обновляем страницу
+	// Reload page
 	window.location.reload();
 }
 ```
 
-## 🎯 Возможные сценарии
+## 🎯 Possible Scenarios
 
-### Сценарий 1: Транзакция успешна ✅
+### Scenario 1: Transaction Successful ✅
 
-- **Что делать:** Обновить приложение или перезагрузить страницу
-- **Результат:** Пользователь должен увидеть статус "зарегистрирован"
+- **What to do:** Update application or reload page
+- **Result:** User should see "registered" status
 
-### Сценарий 2: Транзакция не удалась ❌
+### Scenario 2: Transaction Failed ❌
 
-- **Что делать:** Попробовать регистрацию снова
-- **Причина:** Возможно, недостаточно газа или ошибка в контракте
+- **What to do:** Try registration again
+- **Reason:** Possibly insufficient gas or contract error
 
-### Сценарий 3: Транзакция в обработке ⏳
+### Scenario 3: Transaction Processing ⏳
 
-- **Что делать:** Подождать несколько минут
-- **Результат:** Статус изменится на "Success" или "Failed"
+- **What to do:** Wait a few minutes
+- **Result:** Status will change to "Success" or "Failed"
 
-## 🔧 Альтернативные решения
+## 🔧 Alternative Solutions
 
-### Если ничего не работает:
+### If nothing works:
 
-1. **Прямая регистрация через VeWorld Wallet:**
+1. **Direct registration via VeWorld Wallet:**
 
-   - Откройте VeWorld Wallet
-   - Перейдите в "DApps"
-   - Найдите контракт `0x3e445638b907d942c33b904d6ea6951ac533bc34`
-   - Вызовите функцию `registerDonor()`
+   - Open VeWorld Wallet
+   - Go to "DApps"
+   - Find contract `0x3e445638b907d942c33b904d6ea6951ac533bc34`
+   - Call function `registerDonor()`
 
-2. **Через VeChain Explorer:**
-   - Откройте https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
-   - Перейдите на вкладку "Contract"
-   - Найдите функцию `registerDonor()`
-   - Подключите кошелек и вызовите функцию
+2. **Via VeChain Explorer:**
+   - Open https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
+   - Go to "Contract" tab
+   - Find function `registerDonor()`
+   - Connect wallet and call function
 
-## 📞 Поддержка
+## 📞 Support
 
-Если проблема не решается:
+If problem is not resolved:
 
 - **VeChain Discord:** https://discord.gg/vechain
 - **VeChain GitHub:** https://github.com/vechain
-- **Документация:** https://docs.vechain.org/
+- **Documentation:** https://docs.vechain.org/
 
-## 🎯 Следующие шаги
+## 🎯 Next Steps
 
-1. **Проверьте VeChain Explorer** - найдите транзакцию регистрации
-2. **Определите статус транзакции** - Success/Failed/Pending
-3. **Примите соответствующее решение** на основе статуса
-4. **Если успешно** - обновите приложение
-5. **Если неудачно** - попробуйте снова
+1. **Check VeChain Explorer** - find registration transaction
+2. **Determine transaction status** - Success/Failed/Pending
+3. **Take appropriate action** based on status
+4. **If successful** - update application
+5. **If unsuccessful** - try again

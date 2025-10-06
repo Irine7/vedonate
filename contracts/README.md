@@ -1,57 +1,57 @@
 # VeDonate Smart Contracts
 
-Смарт-контракты для децентрализованной платформы донорства крови на блокчейне VeChain.
+Smart contracts for decentralized blood donation platform on VeChain blockchain.
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Установка зависимостей
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Компиляция контрактов
+### Compile Contracts
 
 ```bash
 npm run compile
 ```
 
-### Деплой в VeChain Testnet
+### Deploy to VeChain Testnet
 
 ```bash
 npm run deploy
 ```
 
-### Проверка контрактов
+### Verify Contracts
 
 ```bash
 npm run verify
 ```
 
-## 📋 Доступные команды
+## 📋 Available Commands
 
-- `npm run compile` - Компиляция контрактов
-- `npm run deploy` - Деплой в VeChain Testnet
-- `npm run verify` - Верификация контрактов в блокчейн-эксплорере
-- `npm run clean` - Очистка артефактов
-- `npm run test:all` - Запуск всех тестов
+- `npm run compile` - Compile contracts
+- `npm run deploy` - Deploy to VeChain Testnet
+- `npm run verify` - Verify contracts in blockchain explorer
+- `npm run clean` - Clean artifacts
+- `npm run test:all` - Run all tests
 
-## 🌐 Сети
+## 🌐 Networks
 
-Проект настроен для работы с **VeChain Testnet**:
+Project configured to work with **VeChain Testnet**:
 
 - **Network**: VeChain Testnet
 - **RPC URL**: https://rpc-testnet.vechain.energy
 - **Chain ID**: 100010
 - **Explorer**: https://explore-testnet.vechain.org
 
-## 💰 Получение тестовых токенов
+## 💰 Getting Test Tokens
 
-Для получения тестовых VET токенов используйте:
+To get test VET tokens use:
 
 - [VeChain Faucet](https://faucet.vechain.org/)
 
-## 📄 Деплоенные контракты
+## 📄 Deployed Contracts
 
 ### VeChain Testnet (05.10.2025)
 
@@ -59,36 +59,36 @@ npm run verify
 - **Donor Badges**: `0x9575e91189e60b4e9a41f136c87d177e42296a88`
 - **VeDonate**: `0x3e445638b907d942c33b904d6ea6951ac533bc34`
 
-## 🔧 Конфигурация
+## 🔧 Configuration
 
-Проект использует VeChain SDK Hardhat Plugin для интеграции с VeChain блокчейном.
+Project uses VeChain SDK Hardhat Plugin for VeChain blockchain integration.
 
-### Основные настройки:
+### Main Settings:
 
 - **Solidity**: 0.8.20
 - **EVM Version**: paris
-- **Optimizer**: включен (200 runs)
+- **Optimizer**: enabled (200 runs)
 
-## 🧪 Тестирование
+## 🧪 Testing
 
 ```bash
-# Быстрый тест
+# Quick test
 npm run test:quick
 
-# Базовые тесты
+# Basic tests
 npm run test:basic
 
-# Тесты граничных случаев
+# Edge case tests
 npm run test:edge
 
-# Тесты бейджей
+# Badge tests
 npm run test:badges
 
-# Все тесты
+# All tests
 npm run test:all
 ```
 
-## 📚 Документация
+## 📚 Documentation
 
 - [VeChain Developer Docs](https://docs.vechain.org/)
 - [Hardhat VeChain Plugin](https://docs.vechain.org/developer-resources/frameworks-and-ides/hardhat)

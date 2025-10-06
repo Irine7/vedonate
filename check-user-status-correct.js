@@ -2,68 +2,68 @@ const USER_ADDRESS = '0xb302484fc7cbecad3983E6C33efE28C3286972f6';
 const CONTRACT_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 
 async function checkUserRegistrationStatus() {
-	console.log('🔍 Проверяем статус регистрации пользователя...');
-	console.log('📍 Адрес пользователя:', USER_ADDRESS);
-	console.log('📄 Адрес контракта:', CONTRACT_ADDRESS);
+	console.log('🔍 Checking the registration status of the user...');
+	console.log('📍 User address:', USER_ADDRESS);
+	console.log('📄 Contract address:', CONTRACT_ADDRESS);
 	console.log('');
 
 	try {
-		// Используем официальный VeChain REST API эндпоинт
+		// Use the official VeChain REST API endpoint
 		const apiUrl = 'https://testnet.vechain.org';
 
-		console.log('📞 Проверяем информацию о контракте через VeChain REST API...');
+		console.log('📞 Checking the information about the contract through VeChain REST API...');
 
-		// Сначала проверим, что контракт существует
+		// First check that the contract exists
 		const contractResponse = await fetch(`${apiUrl}/accounts/${CONTRACT_ADDRESS}`);
 
-		console.log('📡 HTTP статус:', contractResponse.status);
-		console.log('📡 HTTP заголовки:', Object.fromEntries(contractResponse.headers.entries()));
+		console.log('📡 HTTP status:', contractResponse.status);
+		console.log('📡 HTTP headers:', Object.fromEntries(contractResponse.headers.entries()));
 		
 		const responseText = await contractResponse.text();
-		console.log('📡 Сырой ответ:', responseText.substring(0, 500));
+		console.log('📡 Raw response:', responseText.substring(0, 500));
 		
 		if (!responseText) {
-			throw new Error('Пустой ответ от сервера');
+			throw new Error('Empty response from server');
 		}
 		
 		const contractInfo = JSON.parse(responseText);
 
-		console.log('📊 Информация о контракте:', contractInfo);
+		console.log('📊 Information about the contract:', contractInfo);
 
 		if (contractInfo.balance !== undefined) {
-			console.log('✅ Контракт существует и активен');
-			console.log('💰 Баланс контракта:', contractInfo.balance);
-			console.log('🔢 Энергия контракта:', contractInfo.energy || 'N/A');
+			console.log('✅ Contract exists and is active');
+			console.log('💰 Contract balance:', contractInfo.balance);
+			console.log('🔢 Contract energy:', contractInfo.energy || 'N/A');
 		} else {
-			console.log('⚠️ Контракт не найден или не активен');
+			console.log('⚠️ Contract not found or not active');
 		}
 
 		// Получаем код контракта
-		console.log('\n📞 Получаем код контракта...');
+		console.log('\n📞 Getting the code of the contract...');
 		const codeResponse = await fetch(`${apiUrl}/accounts/${CONTRACT_ADDRESS}/code`);
 		
 		if (codeResponse.ok) {
 			const codeInfo = await codeResponse.json();
-			console.log('📊 Код контракта получен, длина:', codeInfo.code ? codeInfo.code.length : 0);
+			console.log('📊 Code of the contract obtained, length:', codeInfo.code ? codeInfo.code.length : 0);
 		} else {
-			console.log('⚠️ Не удалось получить код контракта');
+			console.log('⚠️ Unable to get the code of the contract');
 		}
 
-		// Попробуем получить информацию о пользователе
-		console.log('\n📞 Проверяем информацию о пользователе...');
+		// Try to get the information about the user
+		console.log('\n📞 Checking the information about the user...');
 		const userResponse = await fetch(`${apiUrl}/accounts/${USER_ADDRESS}`);
 		
 		if (userResponse.ok) {
 			const userInfo = await userResponse.json();
-			console.log('📊 Информация о пользователе:', userInfo);
+			console.log('📊 Information about the user:', userInfo);
 		} else {
-			console.log('⚠️ Не удалось получить информацию о пользователе');
+			console.log('⚠️ Unable to get the information about the user');
 		}
 
-		// Попробуем получить события контракта (регистрации)
-		console.log('\n📞 Проверяем события регистрации...');
+		// Try to get the events of the contract (registration)
+		console.log('\n📞 Checking the events of the contract (registration)...');
 		
-		// Попробуем разные варианты эндпоинтов для событий
+		// Try different endpoints for events
 		const eventEndpoints = [
 			`${apiUrl}/logs/event?address=${CONTRACT_ADDRESS}&topic0=0x5b34c965`,
 			`${apiUrl}/logs/event?address=${CONTRACT_ADDRESS}`,
@@ -72,26 +72,26 @@ async function checkUserRegistrationStatus() {
 		];
 
 		for (const endpoint of eventEndpoints) {
-			console.log(`   Пробуем: ${endpoint}`);
+			console.log(`   Trying: ${endpoint}`);
 			try {
 				const eventsResponse = await fetch(endpoint);
 				
 				if (eventsResponse.ok) {
 					const eventsInfo = await eventsResponse.json();
-					console.log('📊 События получены:', eventsInfo);
+					console.log('📊 Events obtained:', eventsInfo);
 					break;
 				} else {
-					console.log(`   ❌ Статус: ${eventsResponse.status}`);
+					console.log(`   ❌ Status: ${eventsResponse.status}`);
 				}
 			} catch (e) {
-				console.log(`   ❌ Ошибка: ${e.message}`);
+				console.log(`   ❌ Error: ${e.message}`);
 			}
 		}
 
-		// Попробуем получить транзакции пользователя
-		console.log('\n🔍 Проверяем транзакции пользователя...');
+		// Try to get the transactions of the user
+		console.log('\n🔍 Checking the transactions of the user...');
 
-		// Попробуем разные варианты эндпоинтов для транзакций
+		// Try different endpoints for transactions
 		const txEndpoints = [
 			`${apiUrl}/accounts/${USER_ADDRESS}/transactions?limit=10`,
 			`${apiUrl}/accounts/${USER_ADDRESS}/transactions`,
@@ -100,25 +100,25 @@ async function checkUserRegistrationStatus() {
 		];
 
 		for (const endpoint of txEndpoints) {
-			console.log(`   Пробуем: ${endpoint}`);
+			console.log(`   Trying: ${endpoint}`);
 			try {
 				const txResponse = await fetch(endpoint);
 				
 				if (txResponse.ok) {
 					const txData = await txResponse.json();
-					console.log(`📈 Транзакций найдено: ${txData.length || 0}`);
-					console.log('📊 Транзакции:', txData);
+					console.log(`📈 Transactions found: ${txData.length || 0}`);
+					console.log('📊 Transactions:', txData);
 					break;
 				} else {
-					console.log(`   ❌ Статус: ${txResponse.status}`);
+					console.log(`   ❌ Status: ${txResponse.status}`);
 				}
 			} catch (e) {
-				console.log(`   ❌ Ошибка: ${e.message}`);
+				console.log(`   ❌ Error: ${e.message}`);
 			}
 		}
 
 	} catch (error) {
-		console.error('❌ Ошибка при проверке статуса:', error);
+		console.error('❌ Error checking status:', error);
 	}
 }
 

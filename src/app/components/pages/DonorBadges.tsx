@@ -34,12 +34,12 @@ export function DonorBadges(): ReactElement {
 		return (
 			<Card bg={cardBg}>
 				<CardHeader>
-					<Heading size="md">🏆 NFT Бейджи</Heading>
+					<Heading size="md">🏆 NFT Badges</Heading>
 				</CardHeader>
 				<CardBody>
 					<VStack spacing={4}>
 						<Spinner color="red.400" />
-						<Text color="gray.600">Загрузка бейджей из блокчейна...</Text>
+						<Text color="gray.600">Loading badges from blockchain...</Text>
 					</VStack>
 				</CardBody>
 			</Card>
@@ -96,14 +96,14 @@ export function DonorBadges(): ReactElement {
 	return (
 		<Card bg={cardBg}>
 			<CardHeader>
-				<Heading size="md">🏆 NFT Бейджи</Heading>
+				<Heading size="md">🏆 NFT Badges</Heading>
 			</CardHeader>
 			<CardBody>
 				<VStack spacing={6} align="stretch">
 					{/* Earned Badges */}
 					<Box>
 						<Text fontWeight="bold" mb={3} color="green.400">
-							Полученные бейджи ({earnedBadges.length})
+							Earned Badges ({earnedBadges.length})
 						</Text>
 						{earnedBadges.length > 0 ? (
 							<SimpleGrid columns={2} spacing={3}>
@@ -114,7 +114,7 @@ export function DonorBadges(): ReactElement {
 									return (
 										<Tooltip
 											key={badgeType}
-											label={`${getBadgeName(badgeType)} - NFT в блокчейне`}
+											label={`${getBadgeName(badgeType)} - NFT in blockchain`}
 											placement="top"
 										>
 											<Box
@@ -142,7 +142,7 @@ export function DonorBadges(): ReactElement {
 							</SimpleGrid>
 						) : (
 							<Text fontSize="sm" color="gray.500">
-								Пока нет полученных бейджей
+								No earned badges yet
 							</Text>
 						)}
 					</Box>
@@ -150,7 +150,7 @@ export function DonorBadges(): ReactElement {
 					{/* Available Badges */}
 					<Box>
 						<Text fontWeight="bold" mb={3} color="blue.400">
-							Доступные бейджи
+							Available Badges
 						</Text>
 						<SimpleGrid columns={2} spacing={3}>
 							{allBadges.map((badgeType) => {
@@ -160,7 +160,7 @@ export function DonorBadges(): ReactElement {
 								return (
 									<Tooltip
 										key={badgeType}
-										label={`Требуется: ${getBadgeRequirement(badgeType)}`}
+										label={`Requires: ${getBadgeRequirement(badgeType)}`}
 										placement="top"
 									>
 										<Box
@@ -187,7 +187,7 @@ export function DonorBadges(): ReactElement {
 											</Text>
 											{status.available && (
 												<Badge colorScheme="blue" size="sm" mt={1}>
-													Доступен
+													Available
 												</Badge>
 											)}
 										</Box>
@@ -198,8 +198,8 @@ export function DonorBadges(): ReactElement {
 					</Box>
 
 					<Text fontSize="xs" color="gray.500" textAlign="center">
-						NFT-бейджи автоматически начисляются в блокчейне при достижении
-						требований
+						NFT badges are automatically awarded in the blockchain when
+						requirements are met
 					</Text>
 				</VStack>
 			</CardBody>

@@ -8,10 +8,10 @@ async function checkUserRegistrationStatus() {
 	console.log('');
 
 	try {
-		// Создаем простой вызов к контракту через VeChain RPC
-		const rpcUrl = 'https://testnet.veblocks.net/accounts/';
+		// Create a simple call to the contract through VeChain RPC
+		const rpcUrl = 'http://127.0.0.1:8545';
 
-		// ABI для функции isDonorRegistered
+		// ABI for the isDonorRegistered function
 		const isDonorRegisteredABI = {
 			inputs: [{ internalType: 'address', name: 'donor', type: 'address' }],
 			name: 'isDonorRegistered',
@@ -20,12 +20,12 @@ async function checkUserRegistrationStatus() {
 			type: 'function',
 		};
 
-		// Кодируем вызов функции
+		// Encode the function call
 		const functionSelector = '0x' + 'isDonorRegistered(address)'.slice(0, 4);
 		const encodedAddress = USER_ADDRESS.slice(2).padStart(64, '0');
 		const callData = functionSelector + encodedAddress;
 
-		console.log('📞 Вызываем функцию isDonorRegistered через RPC...');
+		console.log('📞 Calling the isDonorRegistered function through RPC...');
 		console.log('   Call data:', callData);
 
 		const rpcRequest = {
@@ -51,47 +51,47 @@ async function checkUserRegistrationStatus() {
 
 		console.log('📡 HTTP статус:', response.status);
 		console.log(
-			'📡 HTTP заголовки:',
+			'📡 HTTP headers:',
 			Object.fromEntries(response.headers.entries())
 		);
 
 		const responseText = await response.text();
-		console.log('📡 Сырой ответ:', responseText.substring(0, 500));
+		console.log('📡 Raw response:', responseText.substring(0, 500));
 
 		if (!responseText) {
-			throw new Error('Пустой ответ от сервера');
+			throw new Error('Empty response from server');
 		}
 
 		const result = JSON.parse(responseText);
 
 		if (result.error) {
-			console.error('❌ Ошибка RPC:', result.error);
+			console.error('❌ RPC error:', result.error);
 			return;
 		}
 
-		console.log('📊 Результат RPC вызова:', result);
+		console.log('📊 RPC call result:', result);
 
-		// Декодируем результат
+		// Decode the result
 		const resultData = result.result;
 		if (
 			resultData ===
 			'0x0000000000000000000000000000000000000000000000000000000000000000'
 		) {
-			console.log('❌ Пользователь НЕ зарегистрирован (false)');
+			console.log('❌ User is not registered (false)');
 		} else if (
 			resultData ===
 			'0x0000000000000000000000000000000000000000000000000000000000000001'
 		) {
-			console.log('✅ Пользователь УЖЕ ЗАРЕГИСТРИРОВАН (true)');
+			console.log('✅ User is already registered (true)');
 		} else {
-			console.log('⚠️ Неожиданный результат:', resultData);
+			console.log('⚠️ Unexpected result:', resultData);
 		}
 
-		// Также проверим последние транзакции пользователя
-		console.log('\n🔍 Проверяем последние транзакции...');
+		// Also check the last transactions of the user
+		console.log('\n🔍 Checking last transactions...');
 
 		try {
-			// Попробуем получить транзакции через другой эндпоинт
+			// Try to get transactions through another endpoint
 			const txResponse = await fetch(
 				`https://explore-testnet.vechain.org/api/transactions?address=${USER_ADDRESS}`
 			);
@@ -99,26 +99,26 @@ async function checkUserRegistrationStatus() {
 			if (txResponse.ok) {
 				const txData = await txResponse.json();
 				console.log(
-					`📈 Транзакций пользователя найдено: ${txData.length || 0}`
+					`📈 Transactions found for user: ${txData.length || 0}`
 				);
 
-				// Ищем транзакции к нашему контракту
+				// Search for transactions to our contract
 				const contractTxs = txData.filter((tx) =>
 					tx.clauses?.some((clause) => clause.to === CONTRACT_ADDRESS)
 				);
 
 				console.log(
-					`📋 Транзакций к контракту VeDonate: ${contractTxs.length}`
+					`📋 Transactions to VeDonate contract: ${contractTxs.length}`
 				);
 
 				if (contractTxs.length > 0) {
-					console.log('\n📝 Последние транзакции к контракту:');
+					console.log('\n📝 Last transactions to contract:');
 					contractTxs.slice(0, 3).forEach((tx, index) => {
 						console.log(`   ${index + 1}. ID: ${tx.txID || tx.id}`);
-						console.log(`      Статус: ${tx.txStatus || tx.status}`);
-						console.log(`      Блок: ${tx.blockNumber || tx.block}`);
+						console.log(`      Status: ${tx.txStatus || tx.status}`);
+						console.log(`      Block: ${tx.blockNumber || tx.block}`);
 						console.log(
-							`      Время: ${
+							`      Time: ${
 								tx.timestamp
 									? new Date(tx.timestamp * 1000).toLocaleString()
 									: 'unknown'
@@ -132,20 +132,20 @@ async function checkUserRegistrationStatus() {
 
 						if (registerClause) {
 							console.log(
-								`      🎯 Это транзакция регистрации (registerDonor)`
+								`      🎯 This is the registration transaction (registerDonor)`
 							);
 						}
 						console.log('');
 					});
 				}
 			} else {
-				console.log('⚠️ Не удалось получить транзакции пользователя');
+				console.log('⚠️ Unable to get transactions for user');
 			}
 		} catch (txError) {
-			console.warn('⚠️ Ошибка при получении транзакций:', txError.message);
+			console.warn('⚠️ Error getting transactions:', txError.message);
 		}
 	} catch (error) {
-		console.error('❌ Ошибка при проверке статуса:', error);
+		console.error('❌ Error checking status:', error);
 	}
 }
 

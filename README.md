@@ -1,234 +1,234 @@
-# 🩸 VeDonate - Децентрализованная система донорства крови
+# 🩸 VeDonate - Decentralized Blood Donation System
 
 [![VeChain](https://img.shields.io/badge/VeChain-Blockchain-green)](https://vechain.org)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://typescriptlang.org)
 [![Chakra UI](https://img.shields.io/badge/Chakra%20UI-2.8-purple)](https://chakra-ui.com)
 
-VeDonate — это децентрализованная платформа для поощрения донорства крови и плазмы, построенная на блокчейне VeChain. Платформа мотивирует людей сдавать кровь, предлагая B3TR токены и NFT-бейджи за подтверждённые донации.
+VeDonate is a decentralized platform for incentivizing blood and plasma donation, built on the VeChain blockchain. The platform motivates people to donate blood by offering B3TR tokens and NFT badges for verified donations.
 
-## ✨ Основные возможности
+## ✨ Key Features
 
-- 🔗 **VeChain интеграция** - все данные хранятся в блокчейне
-- 💰 **B3TR токены** - вознаграждение за донации (10 B3TR за кровь, 15 B3TR за плазму)
-- 🏆 **NFT бейджи** - коллекционные достижения за донорство
-- 🤖 **AI верификация** - автоматическая проверка справок о донации
-- 📱 **VeWorld Wallet** - интеграция с официальным кошельком VeChain
-- 🌐 **Многоязычность** - поддержка русского, английского и других языков
-- 🎨 **Современный UI** - красивый интерфейс с темной/светлой темой
+- 🔗 **VeChain Integration** - all data stored on blockchain
+- 💰 **B3TR Tokens** - rewards for donations (10 B3TR for blood, 15 B3TR for plasma)
+- 🏆 **NFT Badges** - collectible achievements for donation
+- 🤖 **AI Verification** - automatic verification of donation certificates
+- 📱 **VeWorld Wallet** - integration with official VeChain wallet
+- 🌐 **Multilingual** - support for Russian, English and other languages
+- 🎨 **Modern UI** - beautiful interface with dark/light theme
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Предварительные требования
+### Prerequisites
 
 - Node.js 18+
-- pnpm (рекомендуется) или npm
-- VeWorld Wallet для тестирования
+- pnpm (recommended) or npm
+- VeWorld Wallet for testing
 
-### Установка
+### Installation
 
-1. **Клонируйте репозиторий**
+1. **Clone the repository**
 
 ```bash
 git clone https://github.com/Irine7/vedonate
 cd vedonate
 ```
 
-2. **Установите зависимости**
+2. **Install dependencies**
 
 ```bash
 pnpm install
 ```
 
-3. **Настройте смарт-контракты**
+3. **Setup smart contracts**
 
 ```bash
 pnpm run setup:contracts
 ```
 
-4. **Запустите проект в режиме разработки**
+4. **Start development server**
 
 ```bash
 pnpm run dev
 ```
 
-Откройте [http://localhost:3000](http://localhost:3000) в браузере.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## ⛓️ Настройка блокчейна
+## ⛓️ Blockchain Setup
 
-### 1. Деплой смарт-контрактов
+### 1. Deploy Smart Contracts
 
 ```bash
-# Компиляция контрактов
+# Compile contracts
 pnpm run contracts:compile
 
-# Деплой в VeChain Testnet
+# Deploy to VeChain Testnet
 pnpm run contracts:deploy:testnet
 ```
 
-### 2. Обновление адресов контрактов
+### 2. Update Contract Addresses
 
-После деплоя обновите файл `src/lib/contracts.ts` с полученными адресами:
+After deployment, update the `src/lib/contracts.ts` file with the received addresses:
 
 ```typescript
 export const CONTRACT_ADDRESSES = {
-	B3TR_TOKEN: '0x...', // Замените на реальный адрес
-	DONOR_BADGES: '0x...', // Замените на реальный адрес
-	VEDONATE: '0x...', // Замените на реальный адрес
+	B3TR_TOKEN: '0x...', // Replace with actual address
+	DONOR_BADGES: '0x...', // Replace with actual address
+	VEDONATE: '0x...', // Replace with actual address
 };
 ```
 
-Подробная инструкция по настройке блокчейна: [BLOCKCHAIN_SETUP.md](./BLOCKCHAIN_SETUP.md)
+Detailed blockchain setup instructions: [BLOCKCHAIN_SETUP.md](./BLOCKCHAIN_SETUP.md)
 
-## 🏗️ Архитектура проекта
+## 🏗️ Project Architecture
 
 ```
 vedonate/
-├── contracts/                 # Смарт-контракты VeChain
-│   ├── B3TRToken.sol         # ERC-20 токен наград
-│   ├── DonorBadges.sol       # ERC-721 NFT бейджи
-│   ├── VeDonate.sol          # Основной контракт
-│   └── deploy.js             # Скрипт деплоя
+├── contracts/                 # VeChain Smart Contracts
+│   ├── B3TRToken.sol         # ERC-20 reward token
+│   ├── DonorBadges.sol       # ERC-721 NFT badges
+│   ├── VeDonate.sol          # Main contract
+│   └── deploy.js             # Deployment script
 ├── src/
 │   ├── app/                  # Next.js App Router
-│   │   ├── components/       # React компоненты
-│   │   │   ├── pages/        # Страницы приложения
-│   │   │   └── features/     # Функциональные компоненты
-│   │   └── layout.tsx        # Корневой layout
-│   ├── hooks/                # React хуки
-│   │   ├── useVeDonate.ts    # Хук для работы с контрактами
-│   │   └── useSafeWallet.ts  # Хук для работы с кошельком
-│   ├── lib/                  # Утилиты и конфигурация
-│   │   └── contracts.ts      # ABI и адреса контрактов
-│   └── types/                # TypeScript типы
-└── public/                   # Статические файлы
+│   │   ├── components/       # React components
+│   │   │   ├── pages/        # Application pages
+│   │   │   └── features/     # Feature components
+│   │   └── layout.tsx        # Root layout
+│   ├── hooks/                # React hooks
+│   │   ├── useVeDonate.ts    # Hook for contract interaction
+│   │   └── useSafeWallet.ts  # Hook for wallet interaction
+│   ├── lib/                  # Utilities and configuration
+│   │   └── contracts.ts      # ABI and contract addresses
+│   └── types/                # TypeScript types
+└── public/                   # Static files
 ```
 
-## 🎯 Основные компоненты
+## 🎯 Main Components
 
 ### VeDonateHome
 
-Главная страница с дашбордом донора, статистикой и основными действиями.
+Main page with donor dashboard, statistics and main actions.
 
 ### UploadCertificate
 
-Компонент для загрузки справок о донации с AI верификацией.
+Component for uploading donation certificates with AI verification.
 
 ### DonationHistory
 
-История донаций пользователя, загруженная из блокчейна.
+User donation history loaded from blockchain.
 
 ### DonorBadges
 
-NFT бейджи и достижения донора.
+NFT badges and donor achievements.
 
 ### AIAssistant
 
-Чат-бот для помощи донорам с рекомендациями.
+Chatbot to help donors with recommendations.
 
-## 🔧 API и хуки
+## 🔧 API and Hooks
 
 ### useVeDonate
 
-Основной хук для взаимодействия с блокчейном:
+Main hook for blockchain interaction:
 
 ```typescript
 const {
-	donorInfo, // Информация о доноре
-	donorDonations, // История донаций
-	donorBadges, // NFT бейджи
-	globalStats, // Глобальная статистика
-	b3trBalance, // Баланс B3TR токенов
-	registerDonor, // Регистрация донора
-	addDonation, // Добавление донации
-	refreshData, // Обновление данных
+	donorInfo, // Donor information
+	donorDonations, // Donation history
+	donorBadges, // NFT badges
+	globalStats, // Global statistics
+	b3trBalance, // B3TR token balance
+	registerDonor, // Donor registration
+	addDonation, // Adding donation
+	refreshData, // Data refresh
 } = useVeDonate();
 ```
 
-## 🎨 Дизайн система
+## 🎨 Design System
 
-Проект использует Chakra UI с кастомной темой, включающей:
+The project uses Chakra UI with a custom theme including:
 
-- Градиенты в цветах крови (красный/оранжевый)
-- Адаптивный дизайн для мобильных устройств
-- Темная и светлая темы
-- Иконки эмодзи для дружелюбного интерфейса
+- Blood-colored gradients (red/orange)
+- Responsive design for mobile devices
+- Dark and light themes
+- Emoji icons for friendly interface
 
-## 🌍 Многоязычность
+## 🌍 Multilingual Support
 
-Поддержка языков через i18next:
+Language support via i18next:
 
-- Русский (по умолчанию)
-- Английский
-- Испанский
-- Французский
-- Немецкий
-- Итальянский
-- Японский
-- Китайский
+- Russian (default)
+- English
+- Spanish
+- French
+- German
+- Italian
+- Japanese
+- Chinese
 
-## 📱 Мобильная поддержка
+## 📱 Mobile Support
 
-- Адаптивный дизайн для всех устройств
-- Оптимизация для VeWorld Wallet на мобильных
-- PWA поддержка с Service Worker
+- Responsive design for all devices
+- Optimization for VeWorld Wallet on mobile
+- PWA support with Service Worker
 
-## 🧪 Тестирование
+## 🧪 Testing
 
 ```bash
-# Запуск линтера
+# Run linter
 pnpm run lint
 
-# Проверка типов
+# Type check
 pnpm run type-check
 
-# Сборка проекта
+# Build project
 pnpm run build
 ```
 
-## 🚀 Деплой в продакшн
+## 🚀 Production Deployment
 
-1. **Настройте переменные окружения**
+1. **Configure environment variables**
 
 ```env
 NEXT_PUBLIC_VECHAIN_NETWORK=mainnet
 NEXT_PUBLIC_CONTRACT_ADDRESSES=...
 ```
 
-2. **Соберите проект**
+2. **Build the project**
 
 ```bash
 pnpm run build
 ```
 
-3. **Деплойте на Vercel, Netlify или другой платформе**
+3. **Deploy to Vercel, Netlify or another platform**
 
-## 🤝 Вклад в проект
+## 🤝 Contributing
 
-1. Fork репозиторий
-2. Создайте feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit изменения (`git commit -m 'Add amazing feature'`)
-4. Push в branch (`git push origin feature/amazing-feature`)
-5. Создайте Pull Request
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Create Pull Request
 
-## 📄 Лицензия
+## 📄 License
 
-Этот проект лицензирован под MIT License - см. файл [LICENSE](LICENSE) для деталей.
+This project is licensed under MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Благодарности
+## 🙏 Acknowledgments
 
-- [VeChain Foundation](https://vechain.org) за экосистему
-- [Chakra UI](https://chakra-ui.com) за компоненты
-- [Next.js](https://nextjs.org) за фреймворк
-- [OpenZeppelin](https://openzeppelin.com) за смарт-контракты
+- [VeChain Foundation](https://vechain.org) for the ecosystem
+- [Chakra UI](https://chakra-ui.com) for components
+- [Next.js](https://nextjs.org) for the framework
+- [OpenZeppelin](https://openzeppelin.com) for smart contracts
 
-## 📞 Поддержка
+## 📞 Support
 
 - 📧 Email: support@vedonate.org
 - 💬 Discord: [VeChain Community](https://discord.gg/vechain)
 - 🐦 Twitter: [@VeDonate](https://twitter.com/vedonate)
-- 📖 Документация: [docs.vedonate.org](https://docs.vedonate.org)
+- 📖 Documentation: [docs.vedonate.org](https://docs.vedonate.org)
 
 ---
 
-**Сделано с ❤️ для спасения жизней через блокчейн технологию**
+**Made with ❤️ for saving lives through blockchain technology**

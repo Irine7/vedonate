@@ -2,51 +2,51 @@ const USER_ADDRESS = '0xb302484fc7cbecad3983E6C33efE28C3286972f6';
 const CONTRACT_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 
 async function checkUserRegistrationStatus() {
-	console.log('🔍 Проверяем статус регистрации пользователя...');
-	console.log('📍 Адрес пользователя:', USER_ADDRESS);
-	console.log('📄 Адрес контракта:', CONTRACT_ADDRESS);
+	console.log('🔍 Checking user registration status...');
+	console.log('📍 User address:', USER_ADDRESS);
+	console.log('📄 Contract address:', CONTRACT_ADDRESS);
 	console.log('');
 
 	try {
-		// Используем VeChain REST API для получения информации о контракте
+		// Use VeChain REST API to get information about the contract
 		const apiUrl = 'https://testnet.veblocks.net';
 
 		console.log(
-			'📞 Проверяем информацию о контракте через VeChain REST API...'
+			'📞 Checking information about the contract through VeChain REST API...'
 		);
 
-		// Сначала проверим, что контракт существует
+		// First check that the contract exists
 		const contractResponse = await fetch(
 			`${apiUrl}/accounts/${CONTRACT_ADDRESS}`
 		);
 
-		console.log('📡 HTTP статус:', contractResponse.status);
+		console.log('📡 HTTP status:', contractResponse.status);
 		console.log(
-			'📡 HTTP заголовки:',
+			'📡 HTTP headers:',
 			Object.fromEntries(contractResponse.headers.entries())
 		);
 
 		const responseText = await contractResponse.text();
-		console.log('📡 Сырой ответ:', responseText.substring(0, 500));
+		console.log('📡 Raw response:', responseText.substring(0, 500));
 
 		if (!responseText) {
-			throw new Error('Пустой ответ от сервера');
+			throw new Error('Empty response from server');
 		}
 
 		const contractInfo = JSON.parse(responseText);
 
-		console.log('📊 Информация о контракте:', contractInfo);
+		console.log('📊 Information about the contract:', contractInfo);
 
 		if (contractInfo.balance !== undefined) {
-			console.log('✅ Контракт существует и активен');
-			console.log('💰 Баланс контракта:', contractInfo.balance);
-			console.log('🔢 Энергия контракта:', contractInfo.energy || 'N/A');
+			console.log('✅ Contract exists and is active');
+			console.log('💰 Contract balance:', contractInfo.balance);
+			console.log('🔢 Contract energy:', contractInfo.energy || 'N/A');
 		} else {
-			console.log('⚠️ Контракт не найден или не активен');
+			console.log('⚠️ Contract not found or not active');
 		}
 
-		// Теперь попробуем получить код контракта
-		console.log('\n📞 Получаем код контракта...');
+		// Now try to get the code of the contract
+		console.log('\n📞 Getting code of the contract...');
 		const codeResponse = await fetch(
 			`${apiUrl}/accounts/${CONTRACT_ADDRESS}/code`
 		);
@@ -54,43 +54,43 @@ async function checkUserRegistrationStatus() {
 		if (codeResponse.ok) {
 			const codeInfo = await codeResponse.json();
 			console.log(
-				'📊 Код контракта получен, длина:',
+				'📊 Code of the contract obtained, length:',
 				codeInfo.code ? codeInfo.code.length : 0
 			);
 		} else {
-			console.log('⚠️ Не удалось получить код контракта');
+			console.log('⚠️ Unable to get code of the contract');
 		}
 
-		// Попробуем альтернативный способ - проверим события контракта
-		console.log('\n📞 Проверяем события контракта...');
+		// Try to check the events of the contract
+		console.log('\n📞 Checking events of the contract...');
 		const eventsResponse = await fetch(
 			`${apiUrl}/logs/event?address=${CONTRACT_ADDRESS}&topic0=0x5b34c965`
 		);
 
 		if (eventsResponse.ok) {
 			const eventsInfo = await eventsResponse.json();
-			console.log('📊 События контракта:', eventsInfo);
+			console.log('📊 Events of the contract:', eventsInfo);
 		} else {
-			console.log('⚠️ Не удалось получить события контракта');
+			console.log('⚠️ Unable to get events of the contract');
 		}
 
-		// Попробуем проверить storage контракта
-		console.log('\n📞 Проверяем storage контракта...');
+		// Try to check the storage of the contract
+		console.log('\n📞 Checking storage of the contract...');
 		const storageResponse = await fetch(
 			`${apiUrl}/accounts/${CONTRACT_ADDRESS}/storage`
 		);
 
 		if (storageResponse.ok) {
 			const storageInfo = await storageResponse.json();
-			console.log('📊 Storage контракта:', storageInfo);
+			console.log('📊 Storage of the contract:', storageInfo);
 		} else {
-			console.log('⚠️ Не удалось получить storage контракта');
+			console.log('⚠️ Unable to get storage of the contract');
 		}
 
-		// Попробуем использовать VeChain REST API для вызова функций контракта
-		console.log('\n📞 Пробуем вызвать функцию контракта через REST API...');
+		// Try to use VeChain REST API to call the functions of the contract
+		console.log('\n📞 Trying to call the function of the contract through REST API...');
 
-		// Создаем транзакцию для вызова функции
+		// Create a transaction to call the function
 		const callRequest = {
 			clauses: [
 				{
@@ -101,7 +101,7 @@ async function checkUserRegistrationStatus() {
 			],
 		};
 
-		console.log('📡 Отправляем запрос:', JSON.stringify(callRequest, null, 2));
+		console.log('📡 Sending request:', JSON.stringify(callRequest, null, 2));
 
 		const callResponse = await fetch(`${apiUrl}/accounts/${CONTRACT_ADDRESS}`, {
 			method: 'POST',
@@ -113,12 +113,12 @@ async function checkUserRegistrationStatus() {
 
 		console.log('📡 HTTP статус:', callResponse.status);
 		console.log(
-			'📡 HTTP заголовки:',
+			'📡 HTTP headers:',
 			Object.fromEntries(callResponse.headers.entries())
 		);
 
 		const callResponseText = await callResponse.text();
-		console.log('📡 Сырой ответ:', callResponseText.substring(0, 500));
+		console.log('📡 Raw response:', callResponseText.substring(0, 500));
 
 		if (
 			callResponseText &&
@@ -126,17 +126,17 @@ async function checkUserRegistrationStatus() {
 		) {
 			try {
 				const callResult = JSON.parse(callResponseText);
-				console.log('📊 Результат вызова:', callResult);
+				console.log('📊 Result of the call:', callResult);
 			} catch (e) {
-				console.log('⚠️ Не удалось распарсить ответ как JSON');
+				console.log('⚠️ Unable to parse the response as JSON');
 			}
 		}
 
-		// Также проверим последние транзакции пользователя
-		console.log('\n🔍 Проверяем последние транзакции...');
+		// Also check the last transactions of the user
+		console.log('\n🔍 Checking last transactions...');
 
 		try {
-			// Попробуем получить транзакции через другой эндпоинт
+			// Try to get transactions through another endpoint
 			const txResponse = await fetch(
 				`https://explore-testnet.vechain.org/api/transactions?address=${USER_ADDRESS}`
 			);
@@ -144,26 +144,26 @@ async function checkUserRegistrationStatus() {
 			if (txResponse.ok) {
 				const txData = await txResponse.json();
 				console.log(
-					`📈 Транзакций пользователя найдено: ${txData.length || 0}`
+					`📈 Transactions found for user: ${txData.length || 0}`
 				);
 
-				// Ищем транзакции к нашему контракту
+				// Search for transactions to our contract
 				const contractTxs = txData.filter((tx) =>
 					tx.clauses?.some((clause) => clause.to === CONTRACT_ADDRESS)
 				);
 
 				console.log(
-					`📋 Транзакций к контракту VeDonate: ${contractTxs.length}`
+					`📋 Transactions to VeDonate contract: ${contractTxs.length}`
 				);
 
 				if (contractTxs.length > 0) {
-					console.log('\n📝 Последние транзакции к контракту:');
+					console.log('\n📝 Last transactions to contract:');
 					contractTxs.slice(0, 3).forEach((tx, index) => {
 						console.log(`   ${index + 1}. ID: ${tx.txID || tx.id}`);
-						console.log(`      Статус: ${tx.txStatus || tx.status}`);
-						console.log(`      Блок: ${tx.blockNumber || tx.block}`);
+						console.log(`      Status: ${tx.txStatus || tx.status}`);
+						console.log(`      Block: ${tx.blockNumber || tx.block}`);
 						console.log(
-							`      Время: ${
+							`      Time: ${
 								tx.timestamp
 									? new Date(tx.timestamp * 1000).toLocaleString()
 									: 'unknown'
@@ -177,20 +177,20 @@ async function checkUserRegistrationStatus() {
 
 						if (registerClause) {
 							console.log(
-								`      🎯 Это транзакция регистрации (registerDonor)`
+								`      🎯 This is the registration transaction (registerDonor)`
 							);
 						}
 						console.log('');
 					});
 				}
 			} else {
-				console.log('⚠️ Не удалось получить транзакции пользователя');
+				console.log('⚠️ Unable to get transactions for user');
 			}
 		} catch (txError) {
-			console.warn('⚠️ Ошибка при получении транзакций:', txError.message);
+			console.warn('⚠️ Error getting transactions:', txError.message);
 		}
 	} catch (error) {
-		console.error('❌ Ошибка при проверке статуса:', error);
+		console.error('❌ Error checking status:', error);
 	}
 }
 

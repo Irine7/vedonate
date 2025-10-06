@@ -1,104 +1,104 @@
-# 🩸 VeDonate - Настройка блокчейн инфраструктуры
+# 🩸 VeDonate - Blockchain Infrastructure Setup
 
-## 📋 Обзор
+## 📋 Overview
 
-VeDonate использует VeChain блокчейн для:
+VeDonate uses VeChain blockchain for:
 
-- ✅ Регистрации донаций в блокчейне
-- ✅ Начисления B3TR токенов за донации
-- ✅ Выпуска NFT-бейджей за достижения
-- ✅ Прозрачности и верификации донорства
+- ✅ Registering donations on blockchain
+- ✅ Awarding B3TR tokens for donations
+- ✅ Issuing NFT badges for achievements
+- ✅ Transparency and verification of donations
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### 1. Установка зависимостей
+### 1. Install Dependencies
 
 ```bash
 cd contracts
 npm install
 ```
 
-### 2. Настройка окружения
+### 2. Environment Setup
 
-Создайте файл `.env` в папке `contracts`:
+Create `.env` file in `contracts` folder:
 
 ```env
-PRIVATE_KEY=ваш_приватный_ключ_для_деплоя
+PRIVATE_KEY=your_private_key_for_deployment
 VECHAIN_TESTNET_URL=https://testnet.veblocks.net
 VECHAIN_MAINNET_URL=https://mainnet.veblocks.net
 ```
 
-### 3. Компиляция контрактов
+### 3. Compile Contracts
 
 ```bash
 npm run compile
 ```
 
-### 4. Деплой в VeChain Testnet
+### 4. Deploy to VeChain Testnet
 
 ```bash
 npm run deploy:testnet
 ```
 
-После успешного деплоя вы получите адреса контрактов:
+After successful deployment you will get contract addresses:
 
 ```
-✅ B3TR Token деплоен по адресу: 0x...
-✅ Donor Badges деплоен по адресу: 0x...
-✅ VeDonate деплоен по адресу: 0x...
+✅ B3TR Token deployed at address: 0x...
+✅ Donor Badges deployed at address: 0x...
+✅ VeDonate deployed at address: 0x...
 ```
 
-### 5. Обновление адресов в фронтенде
+### 5. Update Frontend Addresses
 
-Обновите файл `src/lib/contracts.ts` с полученными адресами:
+Update `src/lib/contracts.ts` file with received addresses:
 
 ```typescript
 export const CONTRACT_ADDRESSES = {
-	B3TR_TOKEN: '0x...', // Замените на реальный адрес
-	DONOR_BADGES: '0x...', // Замените на реальный адрес
-	VEDONATE: '0x...', // Замените на реальный адрес
+	B3TR_TOKEN: '0x...', // Replace with actual address
+	DONOR_BADGES: '0x...', // Replace with actual address
+	VEDONATE: '0x...', // Replace with actual address
 };
 ```
 
-## 📄 Структура смарт-контрактов
+## 📄 Smart Contracts Structure
 
 ### B3TRToken.sol
 
-- ERC-20 токен для вознаграждения доноров
-- 10 B3TR за донацию крови
-- 15 B3TR за донацию плазмы
-- Начальная эмиссия: 1,000,000 B3TR
+- ERC-20 token for rewarding donors
+- 10 B3TR for blood donation
+- 15 B3TR for plasma donation
+- Initial supply: 1,000,000 B3TR
 
 ### DonorBadges.sol
 
-- ERC-721 NFT контракт для бейджей
-- 6 типов бейджей: Первая донация, Бронза, Серебро, Золото, Мастер плазмы, Спасатель жизней
-- Автоматическое начисление по достижениям
+- ERC-721 NFT contract for badges
+- 6 badge types: First Donation, Bronze, Silver, Gold, Plasma Master, Life Saver
+- Automatic awarding based on achievements
 
 ### VeDonate.sol
 
-- Основной контракт системы
-- Регистрация доноров
-- Добавление донаций
-- Начисление наград
-- Управление всей системой
+- Main system contract
+- Donor registration
+- Adding donations
+- Awarding rewards
+- Managing the entire system
 
-## 🔧 Функциональность
+## 🔧 Functionality
 
-### Для пользователей:
+### For Users:
 
-1. **Регистрация донора** - бесплатная регистрация в блокчейне
-2. **Загрузка справки** - фото документа о донации
-3. **AI верификация** - проверка подлинности документа
-4. **Автоматические награды** - B3TR токены и NFT бейджи
+1. **Donor Registration** - free registration on blockchain
+2. **Certificate Upload** - photo of donation document
+3. **AI Verification** - document authenticity verification
+4. **Automatic Rewards** - B3TR tokens and NFT badges
 
-### Для администраторов:
+### For Administrators:
 
-1. **Добавление донаций** - функция `addDonation()`
-2. **Управление наградами** - контроль над B3TR и NFT
-3. **Статистика** - глобальная статистика системы
+1. **Adding Donations** - `addDonation()` function
+2. **Reward Management** - control over B3TR and NFT
+3. **Statistics** - global system statistics
 
-## 🎯 Интеграция с фронтендом
+## 🎯 Frontend Integration
 
 ### Hook useVeDonate
 
@@ -107,55 +107,55 @@ const { donorInfo, donorDonations, donorBadges, registerDonor, addDonation } =
 	useVeDonate();
 ```
 
-### Основные функции:
+### Main Functions:
 
-- `registerDonor()` - регистрация нового донора
-- `addDonation()` - добавление донации (только владелец)
-- `getDonorInfo()` - получение информации о доноре
-- `getGlobalStats()` - глобальная статистика
+- `registerDonor()` - register new donor
+- `addDonation()` - add donation (owner only)
+- `getDonorInfo()` - get donor information
+- `getGlobalStats()` - global statistics
 
-## 🔐 Безопасность
+## 🔐 Security
 
-- Все критические функции защищены модификатором `onlyOwner`
-- Использование ReentrancyGuard для защиты от атак
-- Валидация входных данных
-- Проверка прав доступа
+- All critical functions protected by `onlyOwner` modifier
+- Using ReentrancyGuard for attack protection
+- Input data validation
+- Access rights verification
 
-## 📊 Мониторинг
+## 📊 Monitoring
 
 ### VeChain Explorer
 
 - Testnet: https://explore-testnet.vechain.org
 - Mainnet: https://explore.vechain.org
 
-### События для отслеживания:
+### Events to Track:
 
-- `DonorRegistered` - новая регистрация донора
-- `DonationAdded` - новая донация
-- `TokensRewarded` - начисление B3TR
-- `BadgeMinted` - выпуск NFT бейджа
+- `DonorRegistered` - new donor registration
+- `DonationAdded` - new donation
+- `TokensRewarded` - B3TR awarding
+- `BadgeMinted` - NFT badge issuance
 
-## 🚨 Важные замечания
+## 🚨 Important Notes
 
-1. **Тестовые токены**: Используйте VeChain Testnet для разработки
-2. **Приватные ключи**: Никогда не коммитьте приватные ключи
-3. **Газ**: VeChain использует VTHO для оплаты транзакций
-4. **Верификация**: После деплоя верифицируйте контракты в Explorer
+1. **Test Tokens**: Use VeChain Testnet for development
+2. **Private Keys**: Never commit private keys
+3. **Gas**: VeChain uses VTHO for transaction fees
+4. **Verification**: After deployment verify contracts in Explorer
 
-## 🔄 Обновление контрактов
+## 🔄 Contract Updates
 
-При необходимости обновления:
+When updates are needed:
 
-1. Деплоййте новую версию контрактов
-2. Обновите адреса в `contracts.ts`
-3. Обновите ABI если изменился интерфейс
-4. Протестируйте интеграцию
+1. Deploy new version of contracts
+2. Update addresses in `contracts.ts`
+3. Update ABI if interface changed
+4. Test integration
 
-## 📞 Поддержка
+## 📞 Support
 
-При возникновении проблем:
+If problems occur:
 
-1. Проверьте логи транзакций в Explorer
-2. Убедитесь в корректности адресов контрактов
-3. Проверьте баланс VTHO для оплаты газа
-4. Проверьте подключение к VeWorld Wallet
+1. Check transaction logs in Explorer
+2. Ensure contract address correctness
+3. Check VTHO balance for gas payment
+4. Check VeWorld Wallet connection

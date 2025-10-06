@@ -1,6 +1,5 @@
-// Конфигурация смарт-контрактов VeDonate для VeChain Testnet
 export const CONTRACT_ADDRESSES = {
-	// VeChain Testnet адреса (деплоены 05.10.2024)
+	// VeChain Testnet addresses (deployed 05.10.2024)
 	B3TR_TOKEN:
 		process.env.NEXT_PUBLIC_B3TR_TOKEN_ADDRESS ||
 		'0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3',
@@ -12,12 +11,12 @@ export const CONTRACT_ADDRESSES = {
 		'0x3e445638b907d942c33b904d6ea6951ac533bc34',
 };
 
-// Адрес деплойера (владельца контрактов)
+// Address of the deployer (owner of the contracts)
 export const DEPLOYER_ADDRESS =
 	process.env.NEXT_PUBLIC_DEPLOYER_ADDRESS ||
 	'0xa5e7D3f660893F67aCf000f117a4dDdAD3bf8a07';
 
-// Сетевая конфигурация
+// Network configuration
 export const NETWORK_CONFIG = {
 	chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '100010'),
 	rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://testnet.vechain.org',
@@ -27,7 +26,7 @@ export const NETWORK_CONFIG = {
 	networkType: process.env.NEXT_PUBLIC_NETWORK_TYPE || 'test',
 };
 
-// ABI контрактов
+// ABI of the contracts
 export const B3TR_TOKEN_ABI = [
 	'function balanceOf(address owner) view returns (uint256)',
 	'function totalSupply() view returns (uint256)',
@@ -64,7 +63,7 @@ export const VEDONATE_ABI = [
 	'event RewardsDistributed(address indexed donor, uint256 b3trAmount)',
 ];
 
-// Типы для TypeScript
+// Types for TypeScript
 export interface DonorInfo {
 	wallet: string;
 	totalDonations: bigint;
@@ -100,21 +99,21 @@ export enum BadgeType {
 }
 
 export const BADGE_NAMES = {
-	[BadgeType.FIRST_DONATION]: 'Первая донация',
-	[BadgeType.BRONZE_DONOR]: 'Бронзовый донор',
-	[BadgeType.SILVER_DONOR]: 'Серебряный донор',
-	[BadgeType.GOLD_DONOR]: 'Золотой донор',
-	[BadgeType.PLASMA_MASTER]: 'Мастер плазмы',
-	[BadgeType.LIFESAVER]: 'Спасатель жизней',
+	[BadgeType.FIRST_DONATION]: 'First donation',
+	[BadgeType.BRONZE_DONOR]: 'Bronze donor',
+	[BadgeType.SILVER_DONOR]: 'Silver donor',
+	[BadgeType.GOLD_DONOR]: 'Gold donor',
+	[BadgeType.PLASMA_MASTER]: 'Plasma master',
+	[BadgeType.LIFESAVER]: 'Lifesaver',
 };
 
 export const BADGE_REQUIREMENTS = {
-	[BadgeType.FIRST_DONATION]: '1 донация',
-	[BadgeType.BRONZE_DONOR]: '5 донаций',
-	[BadgeType.SILVER_DONOR]: '10 донаций',
-	[BadgeType.GOLD_DONOR]: '25 донаций',
-	[BadgeType.PLASMA_MASTER]: '10 донаций плазмы',
-	[BadgeType.LIFESAVER]: '50 донаций',
+	[BadgeType.FIRST_DONATION]: '1 donation',
+	[BadgeType.BRONZE_DONOR]: '5 donations',
+	[BadgeType.SILVER_DONOR]: '10 donations',
+	[BadgeType.GOLD_DONOR]: '25 donations',
+	[BadgeType.PLASMA_MASTER]: '10 donations of plasma',
+	[BadgeType.LIFESAVER]: '50 donations',
 };
 
 export const BADGE_ICONS = {

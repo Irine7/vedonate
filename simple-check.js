@@ -1,33 +1,33 @@
-// Простая проверка регистрации пользователя через VeChain Explorer API
+// Simple check of user registration through VeChain Explorer API
 const https = require('https');
 
-// Конфигурация
+// Configuration
 const CONTRACT_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 const USER_ADDRESS = '0xb302484fc7cbecad3983E6C33efE28C3286972f6';
 
-// Функция для получения данных о транзакциях контракта
+// Function to get data about contract transactions
 async function checkUserRegistration() {
-	console.log('🔍 Проверяем регистрацию пользователя...');
-	console.log(`📍 Адрес пользователя: ${USER_ADDRESS}`);
-	console.log(`📄 Адрес контракта: ${CONTRACT_ADDRESS}`);
+	console.log('🔍 Checking user registration...');
+	console.log(`📍 User address: ${USER_ADDRESS}`);
+	console.log(`📄 Contract address: ${CONTRACT_ADDRESS}`);
 	console.log('');
 
 	try {
-		// Проверяем события регистрации через VeChain Explorer API
+		// Check registration events through VeChain Explorer API
 		const eventsUrl = `https://explore-testnet.vechain.org/api/accounts/${CONTRACT_ADDRESS}/events`;
 
-		console.log('🌐 Проверяем события через VeChain Explorer API...');
+		console.log('🌐 Checking events through VeChain Explorer API...');
 		console.log(`📡 URL: ${eventsUrl}`);
 		console.log('');
 
-		// Делаем запрос к API
+		// Make a request to the API
 		const response = await fetch(eventsUrl);
 		const data = await response.json();
 
 		if (data && data.items) {
-			console.log(`📊 Найдено ${data.items.length} событий для контракта`);
+			console.log(`📊 Found ${data.items.length} events for the contract`);
 
-			// Ищем события DonorRegistered
+			// Find DonorRegistered events
 			const registrationEvents = data.items.filter(
 				(event) =>
 					event.topics &&
@@ -42,51 +42,51 @@ async function checkUserRegistration() {
 			);
 
 			console.log(
-				`🎯 Найдено ${registrationEvents.length} событий регистрации`
+				`🎯 Found ${registrationEvents.length} registration events`
 			);
 
 			if (registrationEvents.length > 0) {
-				console.log('✅ РЕЗУЛЬТАТ: Пользователь ЗАРЕГИСТРИРОВАН!');
-				console.log('📝 События регистрации:');
+				console.log('✅ RESULT: User REGISTERED!');
+				console.log('📝 Registration events:');
 				registrationEvents.forEach((event, index) => {
 					console.log(
-						`   ${index + 1}. Блок: ${event.blockNumber}, Транзакция: ${
+						`   ${index + 1}. Block: ${event.blockNumber}, Transaction: ${
 							event.txId
 						}`
 					);
 				});
 			} else {
-				console.log('❌ РЕЗУЛЬТАТ: Пользователь НЕ ЗАРЕГИСТРИРОВАН');
-				console.log('💡 События регистрации не найдены');
+				console.log('❌ RESULT: User NOT REGISTERED');
+				console.log('💡 Registration events not found');
 			}
 		} else {
-			console.log('⚠️ Не удалось получить данные от API');
-			console.log('💡 Попробуйте проверить вручную через VeChain Explorer');
+			console.log('⚠️ Unable to get data from API');
+			console.log('💡 Try to check manually through VeChain Explorer');
 		}
 	} catch (error) {
-		console.error('❌ Ошибка при проверке:', error.message);
+		console.error('❌ Error during check:', error.message);
 		console.log('');
-		console.log('💡 Альтернативные способы проверки:');
+		console.log('💡 Alternative ways to check:');
 		console.log(
-			'   1. Откройте: https://explore-testnet.vechain.org/accounts/' +
+			'   1. Open: https://explore-testnet.vechain.org/accounts/' +
 				CONTRACT_ADDRESS
 		);
-		console.log('   2. Перейдите на вкладку "Events"');
+		console.log('   2. Go to the "Events" tab');
 		console.log(
-			'   3. Найдите событие DonorRegistered с адресом:',
+			'   3. Find the DonorRegistered event with the address:',
 			USER_ADDRESS
 		);
 	}
 
 	console.log('');
-	console.log('🔗 Прямые ссылки для проверки:');
+	console.log('🔗 Direct links for checking:');
 	console.log(
-		`   📄 Контракт: https://explore-testnet.vechain.org/accounts/${CONTRACT_ADDRESS}`
+		`   📄 Contract: https://explore-testnet.vechain.org/accounts/${CONTRACT_ADDRESS}`
 	);
 	console.log(
-		`   👤 Пользователь: https://explore-testnet.vechain.org/accounts/${USER_ADDRESS}`
+		`   👤 User: https://explore-testnet.vechain.org/accounts/${USER_ADDRESS}`
 	);
 }
 
-// Запускаем проверку
+// Start the check
 checkUserRegistration();

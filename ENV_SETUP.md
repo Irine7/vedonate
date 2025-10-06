@@ -1,20 +1,20 @@
-# 🔧 Настройка переменных окружения
+# 🔧 Environment Variables Setup
 
-## Создайте файл `.env.local` в корне проекта
+## Create `.env.local` file in project root
 
-Скопируйте содержимое ниже в файл `.env.local`:
+Copy the content below into `.env.local` file:
 
 ```env
 # VeChain Network Configuration
 NEXT_PUBLIC_NETWORK_TYPE=test
 
-# VeChain Delegator URL (для оплаты комиссий)
+# VeChain Delegator URL (for fee payment)
 NEXT_PUBLIC_DELEGATOR_URL=https://sponsor-testnet.vechain.energy/by/90
 
-# WalletConnect Project ID (получите на https://cloud.walletconnect.com/)
+# WalletConnect Project ID (get from https://cloud.walletconnect.com/)
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_wallet_connect_project_id_here
 
-# Mixpanel Analytics (опционально)
+# Mixpanel Analytics (optional)
 NEXT_PUBLIC_MIXPANEL_TOKEN=your_mixpanel_token_here
 
 # VeChain Testnet Configuration
@@ -29,44 +29,44 @@ NEXT_PUBLIC_DONOR_BADGES_ADDRESS=0x9575e91189e60b4e9a41f136c87d177e42296a88
 NEXT_PUBLIC_VEDONATE_ADDRESS=0x3e445638b907d942c33b904d6ea6951ac533bc34
 ```
 
-## 📋 Обязательные настройки
+## 📋 Required Settings
 
 ### 1. WalletConnect Project ID
 
-- Перейдите на https://cloud.walletconnect.com/
-- Создайте новый проект
-- Скопируйте Project ID
-- Замените `your_wallet_connect_project_id_here` на ваш Project ID
+- Go to https://cloud.walletconnect.com/
+- Create new project
+- Copy Project ID
+- Replace `your_wallet_connect_project_id_here` with your Project ID
 
-### 2. Mixpanel (опционально)
+### 2. Mixpanel (optional)
 
-- Зарегистрируйтесь на https://mixpanel.com/
-- Создайте новый проект
-- Скопируйте Project Token
-- Замените `your_mixpanel_token_here` на ваш токен
+- Register at https://mixpanel.com/
+- Create new project
+- Copy Project Token
+- Replace `your_mixpanel_token_here` with your token
 
-## 🚀 Готово!
+## 🚀 Ready!
 
-После настройки переменных окружения:
+After setting up environment variables:
 
-1. Перезапустите сервер разработки:
+1. Restart development server:
 
    ```bash
    npm run dev
    ```
 
-2. Проверьте, что все работает корректно
+2. Check that everything works correctly
 
-## 🔍 Проверка переменных
+## 🔍 Variable Check
 
-Все переменные окружения используются в следующих файлах:
+All environment variables are used in the following files:
 
-- `src/app/providers/VechainKitProviderWrapper.tsx` - VeChainKit конфигурация
-- `src/lib/mixpanelClient.js` - Mixpanel аналитика
-- `src/lib/contracts.ts` - Адреса контрактов (уже настроены)
+- `src/app/providers/VechainKitProviderWrapper.tsx` - VeChainKit configuration
+- `src/lib/mixpanelClient.js` - Mixpanel analytics
+- `src/lib/contracts.ts` - Contract addresses (already configured)
 
-## ⚠️ Важно
+## ⚠️ Important
 
-- Файл `.env.local` не должен попадать в git (уже в .gitignore)
-- Все переменные с префиксом `NEXT_PUBLIC_` доступны в браузере
-- Без префикса `NEXT_PUBLIC_` переменные доступны только на сервере
+- `.env.local` file should not be committed to git (already in .gitignore)
+- All variables with `NEXT_PUBLIC_` prefix are available in browser
+- Without `NEXT_PUBLIC_` prefix variables are available only on server

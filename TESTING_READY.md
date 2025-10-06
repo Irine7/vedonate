@@ -1,170 +1,166 @@
-# 🧪 VeDonate - Готово к тестированию!
+# 🧪 VeDonate - Ready to testing!
 
-## ✅ **Статус проекта: ГОТОВ К ТЕСТИРОВАНИЮ**
+## ✅ **Project Status: READY FOR TESTING**
 
-Все смарт-контракты задеплоены, адреса обновлены, тестовые скрипты готовы!
+All smart contracts deployed, addresses updated, test scripts ready!
 
-## 🚀 **Быстрый старт тестирования**
+## 🚀 **Quick Testing Start**
 
-### 1. Проверка статуса контрактов
+### 1. Check Contract Status
 
 ```bash
 cd contracts
 pnpm run check
 ```
 
-### 2. Быстрый тест основных функций
+### 2. Quick Test of Core Functions
 
 ```bash
 pnpm run test:quick
 ```
 
-### 3. Полное тестирование
+### 3. Full Testing
 
 ```bash
 pnpm run test:all
 ```
 
-## 📋 **Что протестировано:**
+## 📋 **What is Tested:**
 
-### ✅ **Контракты задеплоены:**
+### ✅ **Contracts Deployed:**
 
 - **B3TR Token**: `0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3`
 - **Donor Badges**: `0x9575e91189e60b4e9a41f136c87d177e42296a88`
 - **VeDonate**: `0x3e445638b907d942c33b904d6ea6951ac533bc34`
 
-### ✅ **Тестовые скрипты готовы:**
+### ✅ **Test Scripts Ready:**
 
-- `check-contracts.js` - проверка статуса контрактов
-- `quick-test.js` - быстрый тест основных функций
-- `test-basic.js` - полное тестирование функциональности
-- `test-edge-cases.js` - тестирование граничных случаев
-- `test-badges.js` - тестирование NFT бейджей
+- `check-contracts.js` - check contract status
+- `quick-test.js` - quick test of core functions
+- `test-basic.js` - full functionality testing
+- `test-edge-cases.js` - edge cases testing
+- `test-badges.js` - NFT badges testing
 
-### ✅ **Фронтенд готов:**
+### ✅ **Frontend Ready:**
 
-- Адреса контрактов обновлены
-- VeChain Kit настроен
-- UI компоненты готовы
+- Contract addresses updated
+- VeChain Kit configured
+- UI components ready
 
-## 🎯 **Ожидаемые результаты тестирования:**
+## 🎯 **Expected Testing Results:**
 
-### После `npm run test:quick`:
+### After `npm run test:quick`:
 
-- ✅ 1 донор зарегистрирован
-- ✅ 1 донация добавлена
-- ✅ 10 B3TR токенов начислено
-- ✅ 1 NFT бейдж создан
+- ✅ 1 donor registered
+- ✅ 1 donation added
+- ✅ 10 B3TR tokens awarded
+- ✅ 1 NFT badge created
 
-### После `npm run test:basic`:
+### After `npm run test:basic`:
 
-- ✅ 2 донора зарегистрированы
-- ✅ 2 донации добавлены (кровь + плазма)
-- ✅ 25 B3TR токенов распределено
-- ✅ 2 NFT бейджа созданы
+- ✅ 2 donors registered
+- ✅ 2 donations added (blood + plasma)
+- ✅ 25 B3TR tokens distributed
+- ✅ 2 NFT badges created
 
-### После `npm run test:edge`:
+### After `npm run test:edge`:
 
-- ✅ Все граничные случаи обработаны
-- ✅ Ошибки корректно заблокированы
-- ✅ Валидация работает
+- ✅ All edge cases handled
+- ✅ Errors properly blocked
+- ✅ Validation works
 
-### После `npm run test:badges`:
+### After `npm run test:badges`:
 
-- ✅ 6 типов бейджей протестированы
-- ✅ Автоматическое начисление работает
-- ✅ Дублирование предотвращено
+- ✅ 6 badge types tested
+- ✅ Automatic awarding works
+- ✅ Duplication prevented
 
-## 🔧 **Настройка перед тестированием:**
+## 🔧 **Setup Before Testing:**
 
-### 1. Получение тестовых VET токенов
+### 1. Getting Test VET Tokens
 
-Откройте https://faucet.vechain.org/ и получите тестовые токены для адреса деплойера.
+Open https://faucet.vechain.org/ and get test tokens for the deployer address.
 
-### 2. Настройка мнемонической фразы (опционально)
+### 2. Mnemonic Phrase Setup (Optional)
 
-Создайте файл `.env` в папке `contracts`:
+Create `.env` file in `contracts` folder:
 
 ```env
-MNEMONIC=ваша_мнемоническая_фраза_для_тестирования
+MNEMONIC=your_testing_mnemonic_phrase
 ```
 
-**Примечание**: В hardhat.config.js уже настроена тестовая мнемоника.
+**Note**: Test mnemonic is already configured in hardhat.config.js.
 
-## 📊 **Мониторинг тестов:**
+## 📊 **Test Monitoring:**
 
 ### VeChain Explorer:
 
 - **Testnet**: https://explore-testnet.vechain.org
-- **Ваши контракты**:
+- **Your Contracts**:
   - [B3TR Token](https://explore-testnet.vechain.org/accounts/0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3)
   - [Donor Badges](https://explore-testnet.vechain.org/accounts/0x9575e91189e60b4e9a41f136c87d177e42296a88)
   - [VeDonate](https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34)
 
-### События для отслеживания:
+### Events to Track:
 
-- `DonorRegistered` - регистрация донора
-- `DonationAdded` - добавление донации
-- `TokensRewarded` - начисление B3TR
-- `BadgeMinted` - создание NFT бейджа
+- `DonorRegistered` - donor registration
+- `DonationAdded` - donation addition
+- `TokensRewarded` - B3TR awarding
+- `BadgeMinted` - NFT badge creation
 
-## 🚨 **Устранение проблем:**
+## 🚨 **Troubleshooting:**
 
 ### "Insufficient VTHO"
 
 ```bash
-# Получите больше тестовых токенов
+# Get more test tokens
 open https://faucet.vechain.org/
 ```
 
 ### "Contract not found"
 
 ```bash
-# Проверьте статус контрактов
+# Check contract status
 npm run check
 ```
 
 ### "Transaction failed"
 
 ```bash
-# Проверьте баланс VET
-# Убедитесь, что используете VeChain Testnet
+# Check VET balance
+# Make sure you are using VeChain Testnet
 ```
 
-## 🎉 **Готово к демо!**
+## 🎉 **Ready for Demo!**
 
-### Что можно продемонстрировать:
+### What can be demonstrated:
 
-1. **Регистрация доноров** в блокчейне
-2. **Добавление донаций** с автоматическими наградами
-3. **B3TR токены** за донации
-4. **NFT бейджи** за достижения
-5. **Прозрачность** через VeChain Explorer
-6. **VeWorld Wallet** интеграция
+1. **Donor registration** on blockchain
+2. **Donation addition** with automatic rewards
+3. **B3TR tokens** for donations
+4. **NFT badges** for achievements
+5. **Transparency** through VeChain Explorer
+6. **VeWorld Wallet** integration
 
-### Команды для демо:
+### Demo Commands:
 
 ```bash
-# 1. Проверка контрактов
+# 1. Check contracts
 npm run check
 
-# 2. Быстрый тест
+# 2. Quick test
 npm run test:quick
 
-# 3. Запуск фронтенда
+# 3. Start frontend
 cd ..
 pnpm run dev
 ```
 
-## 📞 **Поддержка:**
+## 📞 **Support:**
 
-При возникновении проблем:
+If problems occur:
 
-1. Проверьте статус контрактов: `npm run check`
-2. Убедитесь в наличии VET токенов
-3. Проверьте подключение к VeChain Testnet
-4. Посмотрите логи в консоли
-
----
-
-**🎊 Поздравляем! VeDonate готов к тестированию и демонстрации!**
+1. Check contract status: `npm run check`
+2. Make sure you have VET tokens
+3. Check connection to VeChain Testnet
+4. Check console logs

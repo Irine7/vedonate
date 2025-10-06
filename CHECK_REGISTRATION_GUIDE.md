@@ -1,106 +1,106 @@
-# 🔍 Как проверить регистрацию пользователя в VeDonate
+# 🔍 How to Check User Registration in VeDonate
 
-## Метод 1: Через VeChain Explorer (Рекомендуется)
+## Method 1: Via VeChain Explorer (Recommended)
 
-### Шаг 1: Откройте VeChain Testnet Explorer
+### Step 1: Open VeChain Testnet Explorer
 
-Перейдите по ссылке: https://explore-testnet.vechain.org/
+Go to: https://explore-testnet.vechain.org/
 
-### Шаг 2: Найдите контракт VeDonate
+### Step 2: Find VeDonate Contract
 
-- Адрес контракта: `0x3e445638b907d942c33b904d6ea6951ac533bc34`
-- Вставьте адрес в поисковую строку и нажмите Enter
+- Contract address: `0x3e445638b907d942c33b904d6ea6951ac533bc34`
+- Paste address in search bar and press Enter
 
-### Шаг 3: Проверьте события регистрации
+### Step 3: Check Registration Events
 
-1. Перейдите на вкладку **"Events"** или **"Logs"**
-2. Найдите событие `DonorRegistered`
-3. Проверьте, есть ли событие с адресом пользователя: `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
+1. Go to **"Events"** or **"Logs"** tab
+2. Find `DonorRegistered` event
+3. Check if there is an event with user address: `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
 
-### Шаг 4: Используйте фильтры
+### Step 4: Use Filters
 
-В разделе событий можно использовать фильтры:
+In events section you can use filters:
 
 - **Event**: `DonorRegistered`
 - **Address**: `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
 
-## Метод 2: Через скрипт (Для разработчиков)
+## Method 2: Via Script (For Developers)
 
-### Запустите скрипт проверки:
+### Run Check Script:
 
 ```bash
 cd /Users/irine/Desktop/vedonate
 node check-user-registration.js
 ```
 
-Этот скрипт:
+This script:
 
-- ✅ Проверит статус регистрации через `isDonorRegistered()`
-- 📊 Покажет полную информацию о доноре
-- 💡 Объяснит результаты
+- ✅ Will check registration status via `isDonorRegistered()`
+- 📊 Will show complete donor information
+- 💡 Will explain results
 
-## Метод 3: Через VeChain Explorer - прямая проверка функции
+## Method 3: Via VeChain Explorer - Direct Function Check
 
-### Шаг 1: Откройте контракт
+### Step 1: Open Contract
 
-- Перейдите: https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
+- Go to: https://explore-testnet.vechain.org/accounts/0x3e445638b907d942c33b904d6ea6951ac533bc34
 
-### Шаг 2: Найдите функцию `isDonorRegistered`
+### Step 2: Find `isDonorRegistered` Function
 
-- Перейдите на вкладку **"Contract"** или **"Read Contract"**
-- Найдите функцию `isDonorRegistered(address donor)`
+- Go to **"Contract"** or **"Read Contract"** tab
+- Find function `isDonorRegistered(address donor)`
 
-### Шаг 3: Вызовите функцию
+### Step 3: Call Function
 
-- В поле `donor` введите: `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
-- Нажмите **"Query"** или **"Call"**
+- In `donor` field enter: `0xb302484fc7cbecad3983E6C33efE28C3286972f6`
+- Click **"Query"** or **"Call"**
 
-### Результат:
+### Result:
 
-- `true` = пользователь зарегистрирован
-- `false` = пользователь не зарегистрирован
+- `true` = user is registered
+- `false` = user is not registered
 
-## Метод 4: Через браузер (Web3)
+## Method 4: Via Browser (Web3)
 
-### Откройте консоль браузера на странице VeChain Explorer и выполните:
+### Open browser console on VeChain Explorer page and execute:
 
 ```javascript
-// Подключение к VeChain Testnet
+// Connect to VeChain Testnet
 const thor = new ThorClient('https://testnet.vechain.org');
 const contractAddress = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 const userAddress = '0xb302484fc7cbecad3983E6C33efE28C3286972f6';
 
-// ABI функции
+// Function ABI
 const abi = ['function isDonorRegistered(address donor) view returns (bool)'];
 const contract = thor.account(contractAddress);
 const abiContract = new ABIContract(abi);
 
-// Проверка
+// Check
 const method = abiContract.getMethodById('isDonorRegistered');
 const result = await contract.method(method).call(userAddress);
-console.log('Зарегистрирован:', result.decoded[0]);
+console.log('Registered:', result.decoded[0]);
 ```
 
-## 🎯 Ожидаемый результат
+## 🎯 Expected Result
 
-Если пользователь **уже зарегистрирован**, вы увидите:
+If user is **already registered**, you will see:
 
-- ✅ `isDonorRegistered()` возвращает `true`
-- 📝 Событие `DonorRegistered` в логах
-- 💡 Это объясняет ошибку "execution reverted" - контракт отклоняет повторную регистрацию
+- ✅ `isDonorRegistered()` returns `true`
+- 📝 `DonorRegistered` event in logs
+- 💡 This explains "execution reverted" error - contract rejects duplicate registration
 
-## 🔧 Решение проблемы
+## 🔧 Problem Solution
 
-Если пользователь уже зарегистрирован:
+If user is already registered:
 
-1. **Не пытайтесь регистрировать повторно** - это вызовет ошибку
-2. **Обновите данные пользователя** - вызовите `fetchDonorData()`
-3. **Покажите соответствующий интерфейс** - для уже зарегистрированных пользователей
+1. **Do not try to register again** - this will cause an error
+2. **Update user data** - call `fetchDonorData()`
+3. **Show appropriate interface** - for already registered users
 
-## 📞 Поддержка
+## 📞 Support
 
-Если возникли проблемы с проверкой, проверьте:
+If you have problems with checking, verify:
 
-- ✅ Подключение к интернету
-- ✅ Правильность адреса контракта
-- ✅ Доступность VeChain Testnet
+- ✅ Internet connection
+- ✅ Contract address correctness
+- ✅ VeChain Testnet availability

@@ -1,20 +1,15 @@
 const { ethers } = require('hardhat');
 
-/**
- * 🔍 Проверка статуса деплоенных контрактов
- * Проверяет доступность и базовую информацию о контрактах
- */
-
 async function checkContracts() {
 	console.log('🔍 Проверка статуса контрактов VeDonate...\n');
 
-	// Адреса деплоенных контрактов
+	// Deployed contracts addresses
 	const VEDONATE_ADDRESS = '0x3e445638b907d942c33b904d6ea6951ac533bc34';
 	const B3TR_ADDRESS = '0x3e0d2d748f66a56b3ed4d1afbe2e63a9db2844c3';
 	const BADGES_ADDRESS = '0x9575e91189e60b4e9a41f136c87d177e42296a88';
 
 	try {
-		// Получаем контракты
+		// Get contracts
 		console.log('📄 Получение контрактов...');
 		const veDonate = await ethers.getContractAt('VeDonate', VEDONATE_ADDRESS);
 		const b3trToken = await ethers.getContractAt('B3TRToken', B3TR_ADDRESS);
@@ -22,10 +17,10 @@ async function checkContracts() {
 			'DonorBadges',
 			BADGES_ADDRESS
 		);
-		console.log('✅ Контракты получены\n');
+		console.log('✅ Contracts received\n');
 
-		// Проверка B3TR Token
-		console.log('💰 Проверка B3TR Token:');
+		// Checking B3TR Token
+		console.log('💰 Checking B3TR Token:');
 		console.log('------------------------');
 		try {
 			const name = await b3trToken.name();
@@ -33,39 +28,39 @@ async function checkContracts() {
 			const decimals = await b3trToken.decimals();
 			const totalSupply = await b3trToken.totalSupply();
 
-			console.log(`✅ Название: ${name}`);
-			console.log(`✅ Символ: ${symbol}`);
-			console.log(`✅ Дробная часть: ${decimals}`);
+			console.log(`✅ Name: ${name}`);
+			console.log(`✅ Symbol: ${symbol}`);
+			console.log(`✅ Decimals: ${decimals}`);
 			console.log(
-				`✅ Общее предложение: ${ethers.formatEther(totalSupply)} B3TR`
+				`✅ Total supply: ${ethers.formatEther(totalSupply)} B3TR`
 			);
 		} catch (error) {
-			console.log(`❌ Ошибка B3TR Token: ${error.message}`);
+			console.log(`❌ Error B3TR Token: ${error.message}`);
 		}
 		console.log('');
 
-		// Проверка Donor Badges
-		console.log('🏆 Проверка Donor Badges:');
+		// Checking Donor Badges
+		console.log('🏆 Checking Donor Badges:');
 		console.log('-------------------------');
 		try {
 			const name = await donorBadges.name();
 			const symbol = await donorBadges.symbol();
 			// VeChain не поддерживает totalSupply для ERC721
-			console.log(`✅ Название: ${name}`);
-			console.log(`✅ Символ: ${symbol}`);
-			console.log(`✅ Контракт NFT бейджей работает`);
+			console.log(`✅ Name: ${name}`);
+			console.log(`✅ Symbol: ${symbol}`);
+			console.log(`✅ Donor Badges contract works`);
 		} catch (error) {
-			console.log(`❌ Ошибка Donor Badges: ${error.message}`);
+			console.log(`❌ Error Donor Badges: ${error.message}`);
 		}
 		console.log('');
 
-		// Проверка VeDonate
-		console.log('🩸 Проверка VeDonate:');
+		// Checking VeDonate
+		console.log('🩸 Checking VeDonate:');
 		console.log('---------------------');
 		try {
 			const globalStats = await veDonate.getGlobalStats();
 
-			// Обработка данных из VeChain (возвращает массив значений)
+			// Processing data from VeChain (returns an array of values)
 			if (
 				globalStats &&
 				Array.isArray(globalStats) &&
@@ -75,44 +70,44 @@ async function checkContracts() {
 				const totalDonors = globalStats[1];
 				const totalB3TRDistributed = globalStats[2];
 
-				console.log(`✅ Всего донаций: ${totalDonations.toString()}`);
-				console.log(`✅ Всего доноров: ${totalDonors.toString()}`);
+				console.log(`✅ Total donations: ${totalDonations.toString()}`);
+				console.log(`✅ Total donors: ${totalDonors.toString()}`);
 				console.log(
-					`✅ B3TR распределено: ${ethers.formatEther(totalB3TRDistributed)}`
+					`✅ B3TR distributed: ${ethers.formatEther(totalB3TRDistributed)}`
 				);
 			} else {
-				console.log(`✅ Контракт VeDonate работает (нет данных)`);
+				console.log(`✅ VeDonate contract works (no data)`);
 			}
 		} catch (error) {
-			console.log(`❌ Ошибка VeDonate: ${error.message}`);
+			console.log(`❌ Error VeDonate: ${error.message}`);
 		}
 		console.log('');
 
-		// Проверка подключения к сети
-		console.log('🌐 Проверка сети:');
+		// Checking network connection
+		console.log('🌐 Checking network:');
 		console.log('------------------');
 		try {
 			const network = await ethers.provider.getNetwork();
 			const blockNumber = await ethers.provider.getBlockNumber();
-			// VeChain не поддерживает getGasPrice
-			console.log(`✅ Сеть: ${network.name} (ID: ${network.chainId})`);
-			console.log(`✅ Блок: ${blockNumber}`);
-			console.log(`✅ VeChain Testnet подключен`);
+			// VeChain does not support getGasPrice
+			console.log(`✅ Network: ${network.name} (ID: ${network.chainId})`);
+			console.log(`✅ Block: ${blockNumber}`);
+			console.log(`✅ VeChain Testnet connected`);
 		} catch (error) {
-			console.log(`❌ Ошибка сети: ${error.message}`);
+			console.log(`❌ Error network: ${error.message}`);
 		}
 		console.log('');
 
-		// Проверка аккаунтов
-		console.log('👤 Проверка аккаунтов:');
+		// Checking accounts
+		console.log('👤 Checking accounts:');
 		console.log('----------------------');
 		const [deployer, donor1, donor2] = await ethers.getSigners();
 
-		console.log(`✅ Деплойер: ${deployer.address}`);
-		console.log(`✅ Донор 1: ${donor1.address}`);
-		console.log(`✅ Донор 2: ${donor2.address}`);
+		console.log(`✅ Deployer: ${deployer.address}`);
+		console.log(`✅ Donor 1: ${donor1.address}`);
+		console.log(`✅ Donor 2: ${donor2.address}`);
 
-		// Проверка балансов
+		// Checking balances
 		try {
 			const deployerBalance = await ethers.provider.getBalance(
 				deployer.address
@@ -120,28 +115,28 @@ async function checkContracts() {
 			const donor1Balance = await ethers.provider.getBalance(donor1.address);
 
 			console.log(
-				`💰 Баланс деплойера: ${ethers.formatEther(deployerBalance)} VET`
+				`💰 Deployer balance: ${ethers.formatEther(deployerBalance)} VET`
 			);
 			console.log(
-				`💰 Баланс донора 1: ${ethers.formatEther(donor1Balance)} VET`
+				`💰 Donor 1 balance: ${ethers.formatEther(donor1Balance)} VET`
 			);
 
 			if (deployerBalance < ethers.parseEther('1')) {
-				console.log('⚠️  Предупреждение: Низкий баланс деплойера');
+				console.log('⚠️  Warning: Low deployer balance');
 			}
 		} catch (error) {
-			console.log(`❌ Ошибка балансов: ${error.message}`);
+			console.log(`❌ Error balances: ${error.message}`);
 		}
 		console.log('');
 
-		console.log('🎉 Проверка контрактов завершена!');
-		console.log('\n📋 Сводка:');
-		console.log('✅ Все контракты доступны');
-		console.log('✅ Сеть подключена');
-		console.log('✅ Аккаунты готовы к тестированию');
-		console.log('\n🚀 Готово к запуску тестов!');
+		console.log('🎉 Checking contracts completed!');
+		console.log('\n📋 Summary:');
+		console.log('✅ All contracts available');
+		console.log('✅ Network connected');
+		console.log('✅ Accounts ready for testing');
+		console.log('\n🚀 Ready to run tests!');
 	} catch (error) {
-		console.error('💥 Ошибка проверки контрактов:', error);
+		console.error('💥 Error checking contracts:', error);
 		throw error;
 	}
 }
@@ -149,6 +144,6 @@ async function checkContracts() {
 checkContracts()
 	.then(() => process.exit(0))
 	.catch((error) => {
-		console.error('💥 Проверка провалилась');
+		console.error('💥 Checking contracts failed');
 		process.exit(1);
 	});

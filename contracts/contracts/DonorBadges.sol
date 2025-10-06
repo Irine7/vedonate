@@ -3,49 +3,49 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-// import "@openzeppelin/contracts/utils/Counters.sol"; // Удалено в OpenZeppelin 5.x
+// import "@openzeppelin/contracts/utils/Counters.sol"; // Removed in OpenZeppelin 5.x
 
 /**
  * @title DonorBadges
- * @dev ERC-721 NFT контракт для бейджей доноров
+ * @dev ERC-721 NFT contract for donor badges
  */
 contract DonorBadges is ERC721, Ownable {
-    // using Counters for Counters.Counter; // Удалено в OpenZeppelin 5.x
+    // using Counters for Counters.Counter; // Removed in OpenZeppelin 5.x
     
     uint256 private _tokenIds;
     
-    // Типы бейджей
+    // Badge types
     enum BadgeType {
-        FIRST_DONATION,    // Первая донация
-        BRONZE_DONOR,      // 5 донаций
-        SILVER_DONOR,      // 10 донаций
-        GOLD_DONOR,        // 25 донаций
-        PLASMA_MASTER,     // 10 донаций плазмы
-        LIFESAVER          // 50 донаций
+        FIRST_DONATION,    // First donation
+        BRONZE_DONOR,      // 5 donations
+        SILVER_DONOR,      // 10 donations
+        GOLD_DONOR,        // 25 donations
+        PLASMA_MASTER,     // 10 plasma donations
+        LIFESAVER          // 50 donations
     }
     
-    // Структура бейджа
+    // Badge structure
     struct Badge {
         BadgeType badgeType;
         uint256 mintedAt;
         string metadata;
     }
     
-    // Маппинги
+    // Mappings
     mapping(uint256 => Badge) public badges;
     mapping(address => mapping(BadgeType => bool)) public hasBadge;
     mapping(address => uint256[]) public donorBadges;
     
-    // События
+    // Events
     event BadgeMinted(address indexed donor, uint256 tokenId, BadgeType badgeType);
     event BadgeAwarded(address indexed donor, BadgeType badgeType);
     
     constructor() ERC721("VeDonate Badges", "VEDONATE") Ownable(msg.sender) {}
     
     /**
-     * @dev Минт бейджа донору
-     * @param donor Адрес донора
-     * @param badgeType Тип бейджа
+     * @dev Mint badge to donor
+     * @param donor Donor address
+     * @param badgeType Badge type
      */
     function mintBadge(address donor, BadgeType badgeType) public onlyOwner {
         require(!hasBadge[donor][badgeType], "Donor already has this badge");
@@ -53,7 +53,7 @@ contract DonorBadges is ERC721, Ownable {
         _tokenIds++;
         uint256 newTokenId = _tokenIds;
         
-        // Создаем бейдж
+        // Create badge
         Badge memory newBadge = Badge({
             badgeType: badgeType,
             mintedAt: block.timestamp,
@@ -71,68 +71,68 @@ contract DonorBadges is ERC721, Ownable {
     }
     
     /**
-     * @dev Автоматическое начисление бейджей на основе количества донаций
-     * @param donor Адрес донора
-     * @param totalDonations Общее количество донаций
-     * @param plasmaDonations Количество донаций плазмы
+     * @dev Automatic badge awarding based on donation count
+     * @param donor Donor address
+     * @param totalDonations Total donation count
+     * @param plasmaDonations Plasma donation count
      */
     function checkAndAwardBadges(
         address donor, 
         uint256 totalDonations, 
         uint256 plasmaDonations
     ) external onlyOwner {
-        // Первая донация
+        // First donation
         if (totalDonations >= 1 && !hasBadge[donor][BadgeType.FIRST_DONATION]) {
             mintBadge(donor, BadgeType.FIRST_DONATION);
         }
         
-        // Бронзовый донор
+        // Bronze donor
         if (totalDonations >= 5 && !hasBadge[donor][BadgeType.BRONZE_DONOR]) {
             mintBadge(donor, BadgeType.BRONZE_DONOR);
         }
         
-        // Серебряный донор
+        // Silver donor
         if (totalDonations >= 10 && !hasBadge[donor][BadgeType.SILVER_DONOR]) {
             mintBadge(donor, BadgeType.SILVER_DONOR);
         }
         
-        // Золотой донор
+        // Gold donor
         if (totalDonations >= 25 && !hasBadge[donor][BadgeType.GOLD_DONOR]) {
             mintBadge(donor, BadgeType.GOLD_DONOR);
         }
         
-        // Мастер плазмы
+        // Plasma master
         if (plasmaDonations >= 10 && !hasBadge[donor][BadgeType.PLASMA_MASTER]) {
             mintBadge(donor, BadgeType.PLASMA_MASTER);
         }
         
-        // Спасатель жизней
+        // Lifesaver
         if (totalDonations >= 50 && !hasBadge[donor][BadgeType.LIFESAVER]) {
             mintBadge(donor, BadgeType.LIFESAVER);
         }
     }
     
     /**
-     * @dev Получить бейджи донора
-     * @param donor Адрес донора
-     * @return Массив ID токенов бейджей
+     * @dev Get donor badges
+     * @param donor Donor address
+     * @return Array of badge token IDs
      */
     function getDonorBadges(address donor) external view returns (uint256[] memory) {
         return donorBadges[donor];
     }
     
     /**
-     * @dev Проверить наличие бейджа у донора
-     * @param donor Адрес донора
-     * @param badgeType Тип бейджа
-     * @return true если донор имеет бейдж
+     * @dev Check if donor has badge
+     * @param donor Donor address
+     * @param badgeType Badge type
+     * @return true if donor has badge
      */
     function donorHasBadge(address donor, BadgeType badgeType) external view returns (bool) {
         return hasBadge[donor][badgeType];
     }
     
     /**
-     * @dev Получить метаданные бейджа
+     * @dev Get badge metadata
      */
     function getBadgeMetadata(BadgeType badgeType) internal pure returns (string memory) {
         if (badgeType == BadgeType.FIRST_DONATION) {
@@ -152,7 +152,7 @@ contract DonorBadges is ERC721, Ownable {
     }
     
     /**
-     * @dev URI токена для метаданных NFT
+     * @dev Token URI for NFT metadata
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_ownerOf(tokenId) != address(0), "Token does not exist");

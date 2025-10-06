@@ -97,38 +97,38 @@ const UnauthorizedInterface: React.FC = () => {
 	const features = [
 		{
 			icon: '🩸',
-			title: 'Донорство крови',
+			title: 'Blood Donation',
 			description:
-				'Записывайтесь на донации крови и получайте токены B3TR за каждую донацию',
+				'Schedule blood donations and earn B3TR tokens for each donation',
 			color: 'red',
 		},
 		{
 			icon: '💎',
-			title: 'NFT бейджи',
-			description: 'Получайте уникальные NFT бейджи за достижения в донорстве',
+			title: 'NFT Badges',
+			description: 'Earn unique NFT badges for donation achievements',
 			color: 'purple',
 		},
 		{
 			icon: '📊',
-			title: 'Статистика',
+			title: 'Statistics',
 			description:
-				'Отслеживайте свою историю донаций и достижения в личном кабинете',
+				'Track your donation history and achievements in your personal dashboard',
 			color: 'blue',
 		},
 		{
 			icon: '🌐',
-			title: 'Децентрализация',
+			title: 'Decentralization',
 			description:
-				'Все данные хранятся в блокчейне VeChain, обеспечивая прозрачность',
+				'All data is stored in VeChain blockchain, ensuring transparency',
 			color: 'green',
 		},
 	];
 
 	const stats = [
-		{ label: 'Активных доноров', value: '1,234' },
-		{ label: 'Спасенных жизней', value: '5,678' },
-		{ label: 'B3TR токенов распределено', value: '89,012' },
-		{ label: 'Донаций зарегистрировано', value: '12,345' },
+		{ label: 'Active Donors', value: '1,234' },
+		{ label: 'Lives Saved', value: '5,678' },
+		{ label: 'B3TR Tokens Distributed', value: '89,012' },
+		{ label: 'Donations Registered', value: '12,345' },
 	];
 
 	return (
@@ -146,7 +146,7 @@ const UnauthorizedInterface: React.FC = () => {
 							borderRadius="full"
 							fontSize="sm"
 						>
-							🩸 Децентрализованная платформа донорства
+							🩸 Decentralized Donation Platform
 						</Badge>
 
 						<Heading
@@ -164,9 +164,9 @@ const UnauthorizedInterface: React.FC = () => {
 							maxW="2xl"
 							lineHeight="tall"
 						>
-							Присоединяйтесь к революции в донорстве крови. Получайте токены
-							B3TR за каждую донацию, коллекционируйте NFT бейджи и спасайте
-							жизни с помощью блокчейн технологий.
+							Join the blood donation revolution. Earn B3TR tokens for each
+							donation, collect NFT badges and save lives using blockchain
+							technology.
 						</Text>
 					</VStack>
 
@@ -210,11 +210,11 @@ const UnauthorizedInterface: React.FC = () => {
 				<VStack spacing={12}>
 					<VStack spacing={4} textAlign="center">
 						<Heading size="xl" color={textColor}>
-							Почему выбирают VeDonate?
+							Why Choose VeDonate?
 						</Heading>
 						<Text color={subtextColor} maxW="2xl" fontSize="lg">
-							Современная платформа объединяет традиционное донорство с
-							инновационными блокчейн технологиями
+							Modern platform combines traditional donation with innovative
+							blockchain technologies
 						</Text>
 					</VStack>
 
@@ -246,11 +246,11 @@ const UnauthorizedInterface: React.FC = () => {
 					<CardBody p={12} textAlign="center">
 						<VStack spacing={6}>
 							<Heading size="xl" color="white">
-								Готовы начать спасать жизни?
+								Ready to Start Saving Lives?
 							</Heading>
 							<Text color="whiteAlpha.900" fontSize="lg" maxW="2xl">
-								Подключите свой VeWorld кошелек и присоединяйтесь к сообществу
-								доноров, которые меняют мир к лучшему
+								Connect your VeWorld wallet and join the community of donors who
+								are making the world a better place
 							</Text>
 							<WalletButton
 								size="lg"
@@ -278,11 +278,11 @@ const UnauthorizedInterface: React.FC = () => {
 				<Divider mb={8} />
 				<VStack spacing={4} textAlign="center">
 					<Text color={subtextColor} fontSize="sm">
-						🌐 Построено на блокчейне VeChain • 🔒 Безопасно и децентрализовано
+						🌐 Built on VeChain Blockchain • 🔒 Secure and Decentralized
 					</Text>
 					<Text color={subtextColor} fontSize="xs">
-						VeDonate использует смарт-контракты для обеспечения прозрачности и
-						безопасности всех операций
+						VeDonate uses smart contracts to ensure transparency and security of
+						all operations
 					</Text>
 				</VStack>
 			</Container>
